@@ -1,0 +1,14 @@
+{
+    "name": "hc-mc",
+    "version": "1.0.0",
+    "description": "A testbed for homotopy continuation methods",
+    "dependencies": [
+        "eigen3",
+        "cppad",
+        {
+            "name": "doctest",
+            "platform": "!windows"
+        }
+    ],
+    "builtin-baseline": "d221c5d2cbadf35ceb266cbb95750a940b103b65"
+}

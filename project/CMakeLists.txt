@@ -11,15 +11,15 @@ endif()
 #####################################
 # Define Targets
 #####################################
-add_subdirectory(hellolib)
-add_subdirectory(helloapp)
+#add_subdirectory(hellolib)
+add_subdirectory(HC-MC)
 
 #####################################
 # Define Install Targets
 #####################################
 install(TARGETS
-  hellolib
-  helloapp
+ # hellolib
+  HC-MC
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
@@ -28,8 +28,8 @@ install(TARGETS
 
 install(
   FILES 
-    ${CMAKE_SOURCE_DIR}/project/hellolib/include/hellolib.h 
-    ${CMAKE_BINARY_DIR}/exports/hellolib_export.h
+    ${CMAKE_SOURCE_DIR}/project/HC-MC/include/HC-MC.h 
+    #${CMAKE_BINARY_DIR}/exports/hellolib_export.h
   DESTINATION 
     include/hellolib)
 
