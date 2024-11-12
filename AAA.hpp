@@ -232,41 +232,59 @@ AAA<Scalar>::operator()(const std::vector<Scalar> &Z_eval) const {
     for (const auto &z : Z_eval) { result.push_back(evaluate(z)); }
     return result;
 }
-
 template<typename Scalar>
 Scalar
 AAA<Scalar>::evaluate(const Scalar &z) const {
     if (z_.empty()) {
-        // No support points
         std::cerr << "Error: No support points available for evaluation." << std::endl;
         return Scalar(std::numeric_limits<Scalar>::quiet_NaN());
     }
 
-    if (z_.size() == 1) {
-        // Only one support point
-        return f_[0];
-    }
+    if (z_.size() == 1) { return f_[0]; }
+
+    Scalar tol = Scalar(1e-13);
+    Scalar tol_quarter = pow(tol, Scalar(0.25));
 
     Scalar numerator = 0;
     Scalar denominator = 0;
+
+    bool breakflag = false;
+    size_t breakindex = std::numeric_limits<size_t>::max();
+
     for (size_t j = 0; j < z_.size(); ++j) {
-        if (z == z_[j]) {
-            return f_[j]; // Exact value at support point
-        }
         Scalar diff = z - z_[j];
-        if (diff == Scalar(0)) {
-            // Should not happen due to the check above
-            continue;
+        Scalar abs_diff = abs(diff);
+        if (abs_diff < tol_quarter) {
+            breakflag = true;
+            breakindex = j;
+            break;
         }
         Scalar term = w_[j] / diff;
         numerator += term * f_[j];
         denominator += term;
     }
-    if (denominator == Scalar(0)) {
-        std::cerr << "Warning: Denominator is zero at z = " << z << std::endl;
-        return Scalar(std::numeric_limits<Scalar>::quiet_NaN());
+
+    if (breakflag) {
+        numerator = 0;
+        denominator = 0;
+        for (size_t j = 0; j < z_.size(); ++j) {
+            if (j == breakindex) continue;
+            Scalar diff = z - z_[j];
+            Scalar term = w_[j] / diff;
+            numerator += term * f_[j];
+            denominator += term;
+        }
+        Scalar m = z - z_[breakindex];
+        Scalar fz = (w_[breakindex] * f_[breakindex] + m * numerator) / (w_[breakindex] + m * denominator);
+        return fz;
+    } else {
+        if (denominator == Scalar(0)) {
+            std::cerr << "Warning: Denominator is zero at z = " << z << std::endl;
+            return Scalar(std::numeric_limits<Scalar>::quiet_NaN());
+        }
+        return numerator / denominator;
     }
-    return numerator / denominator;
 }
+
 
 #endif // AAA_HPP
