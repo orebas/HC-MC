@@ -136,8 +136,12 @@ setup_compiler() {
 }
 
 # Setup vcpkg
+# Setup vcpkg
 setup_vcpkg() {
     echo "Setting up vcpkg..."
+    
+    # Force use of system binaries (including CMake)
+    export VCPKG_FORCE_SYSTEM_BINARIES=1
     
     # Only clone if directory doesn't exist
     if [ ! -d "external/vcpkg" ]; then
