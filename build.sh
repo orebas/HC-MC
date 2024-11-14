@@ -78,7 +78,8 @@ install_system_dependencies() {
         libcppad-dev \
         libeigen3-dev \
         libboost-all-dev \
-        libtool
+        libtool \
+        ninja-build \
 
     if [ "$COMPILER" = "clang" ]; then
         if [ -n "$COMPILER_VERSION" ]; then
@@ -141,6 +142,7 @@ setup_vcpkg() {
     echo "Setting up vcpkg..."
     
     # Force use of system binaries (including CMake)
+    #export CMAKE_GENERATOR="Unix Makefiles"
     export VCPKG_FORCE_SYSTEM_BINARIES=1
     
     # Only clone if directory doesn't exist
