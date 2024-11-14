@@ -11,6 +11,10 @@ set(TARGET_INCLUDE_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/include)
 find_package(PkgConfig REQUIRED)
 find_package(doctest CONFIG REQUIRED)
 
+# Add Boost dependency
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
 # Locate CppAD using pkg-config
 pkg_check_modules(CPPAD REQUIRED cppad)
 
@@ -20,6 +24,7 @@ target_include_directories(${TARGET_NAME}
     INTERFACE 
         ${TARGET_INCLUDE_FOLDER}
         ${CPPAD_INCLUDE_DIRS}
+        ${Boost_INCLUDE_DIRS}  # Add Boost include dirs
 )
 
 # Link against required dependencies
@@ -27,6 +32,7 @@ target_link_libraries(${TARGET_NAME}
     INTERFACE 
         Eigen3::Eigen
         ${CPPAD_LIBRARIES}
+        ${Boost_LIBRARIES}  # Add Boost libraries
 )
 
 #####################################
@@ -36,6 +42,7 @@ add_executable(${TARGET_NAME}_main
     main.cpp
 )
 
+# Rest of the file remains the same...
 # Enable warnings for the executable
 target_enable_warnings(${TARGET_NAME}_main)
 
