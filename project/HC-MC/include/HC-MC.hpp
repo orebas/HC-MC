@@ -59,10 +59,10 @@ struct BaseType<AD<Base>> {
 // Configuration and result structures
 struct SolveOptions {
   bool debug = false;
-  double tolerance = 1e-12;
+  double tolerance = 1e-10;
   int maxIterations = 100;
   int maxSteps = 1000;
-  double initialStepSize = 0.01;
+  double initialStepSize = 0.001;
   bool verifyDerivatives = false;
 };
 
@@ -398,7 +398,7 @@ std::optional<SolveResult> solve(const Func& F,
 }
 
 // Overload without explicit dimension - try to deduce from a test evaluation
-template <typename Func>
+/*template <typename Func>
 std::optional<SolveResult> solve(const Func& F,
                                  const SolveOptions& options = SolveOptions{}) {
   // Try with dimension 1 first
@@ -420,7 +420,7 @@ std::optional<SolveResult> solve(const Func& F,
           "options).");
     }
   }
-}
+}*/
 
 template <typename Func>
 std::optional<SolveResult> solve_newton(

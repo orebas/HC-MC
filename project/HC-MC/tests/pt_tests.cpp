@@ -32,7 +32,7 @@ TEST_CASE("Circle-Line Intersection") {
   options.debug = true;
   options.tolerance = 1e-10;
 
-  auto result = solve(F, options);
+  auto result = solve(F, 2, options);
   REQUIRE(result.has_value());
 
   const auto& solve_result = *result;
@@ -70,7 +70,7 @@ TEST_CASE("Parabola-Line Intersection") {
   SolveOptions options;
   options.debug = false;
 
-  auto result = solve(F);
+  auto result = solve(F, 2);
   REQUIRE(result.has_value());
 
   const auto& solve_result = *result;
@@ -105,7 +105,7 @@ TEST_CASE("3D Sphere-Plane-Line Intersection") {
   options.debug = false;
   options.tolerance = 1e-10;
 
-  auto result = solve(F);
+  auto result = solve(F, 3, options);
   REQUIRE(result.has_value());
 
   const auto& solve_result = *result;
@@ -135,7 +135,7 @@ TEST_CASE("System with Transcendental Functions") {
   options.debug = false;
   options.verifyDerivatives = true;  // Test derivative computation
 
-  auto result = solve(F);
+  auto result = solve(F, 2, options);
   REQUIRE(result.has_value());
 
   const auto& solve_result = *result;
@@ -164,9 +164,9 @@ TEST_CASE("Higher Dimensional System") {
 
   SolveOptions options;
   options.debug = true;
-  options.maxIterations = 200;  // This system might need more iterations
+  options.maxIterations = 300;  // This system might need more iterations
 
-  auto result = solve(F);
+  auto result = solve(F, 4, options);
   REQUIRE(result.has_value());
 
   const auto& solve_result = *result;

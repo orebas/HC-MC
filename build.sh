@@ -54,6 +54,41 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+
+check_dependencies() {
+    case "$(uname -s)" in
+        Linux*)
+            echo "Required packages for Linux:"
+            echo "  build-essential cmake git pkg-config"
+            echo "  libgmp-dev libmpfr-dev libcppad-dev libeigen3-dev"
+            echo "Install using: sudo apt-get install <packages>"
+            ;;
+        Darwin*)
+            echo "Required packages for macOS:"
+            echo "  Install Xcode command line tools: xcode-select --install"
+            echo "  Install Homebrew packages:"
+            echo "  brew install cmake gmp mpfr cppad eigen"
+            ;;
+        MINGW*|MSYS*|CYGWIN*)
+            echo "Required setup for Windows:"
+            echo "1. Install Visual Studio Build Tools"
+            echo "2. Install CMake"
+            echo "Note: Most dependencies will be handled by vcpkg"
+            ;;
+        *)
+            echo "Unsupported operating system"
+            exit 1
+            ;;
+    esac
+    
+    echo -e "\nMissing dependencies? Follow platform-specific instructions above."
+    read -p "Continue with build? [y/N] " response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+}
+
+
 # Install system dependencies
 install_system_dependencies() {
     echo "Checking and installing system dependencies..."
@@ -188,7 +223,7 @@ setup_vcpkg() {
 # Main build process
 main() {
     # Install system dependencies
-    install_system_dependencies
+    check_dependencies
 
     # Setup compiler
     setup_compiler
