@@ -1,8 +1,0 @@
-Package: cppad
-Version: 20240000.7
-Depends: vcpkg-cmake
-Architecture: x64-linux
-Multi-Arch: same
-Abi: e22d5cc145873d1f49a1551453f2a36f08ff233061cf4ef917cae3e5a8704322
-Description: CppAD: A Package for Differentiation of C++ Algorithms
-Status: purge ok not-installed
