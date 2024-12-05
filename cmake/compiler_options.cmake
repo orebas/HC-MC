@@ -3,6 +3,8 @@
 #
 # Compiler options with hardening flags
 
+#consider reverting -Wnosign-conversion
+
 if(MSVC)
     list(APPEND compiler_options 
         /W4
@@ -35,7 +37,7 @@ else(MSVC)
         -Werror=uninitialized
         -Werror=maybe-uninitialized
         -Wconversion
-        -Wsign-conversion
+        -Wno-sign-conversion
         -Wcast-align
         -Wcast-qual
         -Wdisabled-optimization

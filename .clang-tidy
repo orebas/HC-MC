@@ -1,4 +1,6 @@
 # Configure clang-tidy for modern C++ development
+
+#Some of these exclusions might want to be added back periodically. 
 Checks: '
     *,
     -abseil-*,
@@ -12,6 +14,7 @@ Checks: '
     -readability-else-after-return,
     -readability-static-accessed-through-instance,
     -readability-avoid-const-params-in-decls,
+    -clang-diagnostic-sign-conversion,
     -cppcoreguidelines-non-private-member-variables-in-classes,
     -misc-non-private-member-variables-in-classes,
     -cppcoreguidelines-avoid-magic-numbers,
@@ -27,6 +30,7 @@ Checks: '
     -readability-identifier-length,
     -misc-include-cleaner,
     -readability-function-cognitive-complexity,
+    -cppcoreguidelines-avoid-do-while,
     '
 WarningsAsErrors: ''
 HeaderFilterRegex: 'project/HC-MC/.*'

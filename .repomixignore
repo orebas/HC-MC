@@ -3,3 +3,5 @@ build/
 LICENSE
 vcpkg_installed/
 external/
+.github/
+mpreal.h

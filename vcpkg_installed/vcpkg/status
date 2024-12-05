@@ -1,0 +1,42 @@
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 4d3708d6312aa215931b3eaf15297da56070d104d43d3347aeffbf261a785bf6
+Status: install ok installed
+
+Package: cppad
+Version: 20240000.7
+Depends: vcpkg-cmake
+Architecture: x64-linux
+Multi-Arch: same
+Abi: e22d5cc145873d1f49a1551453f2a36f08ff233061cf4ef917cae3e5a8704322
+Description: CppAD: A Package for Differentiation of C++ Algorithms
+Status: install ok installed
+
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 84cc40914f80fe9b1d1477438b83e8782f44b16d0d6dff1dd8b9a6d4446d7dae
+Status: install ok installed
+
+Package: doctest
+Version: 2.4.11
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 26208f5e578cb01b425a7c2da4bf9f6b597583718d701950f79aa340b89ca75d
+Description: The fastest feature-rich C++11/14/17/20 single-header testing framework
+Status: install ok installed
+
+Package: eigen3
+Version: 3.4.0
+Port-Version: 4
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-linux
+Multi-Arch: same
+Abi: ff7a1d2c2e6363af72ceb6393fc58d84523439777b4b4cb2503e0b2f74b90539
+Description: C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms.
+Status: install ok installed
+

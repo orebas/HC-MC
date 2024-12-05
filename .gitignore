@@ -3,6 +3,7 @@ external/vcpkg/buildtrees/
 external/vcpkg/downloads/
 external/vcpkg/packages/
 external/vcpkg/installed/
+vcpkg_installed/
 
 # In case you have vcpkg in a different location, also include general patterns
 **/vcpkg/buildtrees/

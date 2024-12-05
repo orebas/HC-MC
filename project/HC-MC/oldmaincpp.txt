@@ -1,126 +1,278 @@
-#include <iomanip>
+#include <boost/numeric/odeint.hpp>
+#include <functional>
 #include <iostream>
+#include <vector>
 
 #include "HC-MC.hpp"
+#include "ODESystem.hpp"
+#include "types.hpp"
 
-// Helper function to print solutions nicely
-void print_solution(const SolveResult& result, const std::string& system_name) {
-  std::cout << "\n=== " << system_name << " ===\n";
-  std::cout << "Success: " << (result.success ? "Yes" : "No") << "\n";
-  std::cout << "Residual norm: " << result.residualNorm << "\n";
-  std::cout << "Iterations: " << result.iterations << "\n";
-  std::cout << "Solution: [";
-  for (int i = 0; i < result.solution.size(); ++i) {
-    std::cout << std::setprecision(8) << CppAD::Value(result.solution(i));
-    if (i < result.solution.size() - 1) std::cout << ", ";
+using namespace boost::numeric::odeint;
+
+#include <cppad/cppad.hpp>
+#include <vector>
+
+// Function to compute time derivatives of an ODE system at a given point
+template <typename F, typename Scalar>
+std::vector<Vector<Scalar>> compute_time_derivatives(
+    F&& ode_function,         // ODE function representing dy/dt = F(y)
+    const Vector<Scalar>& X,  // State variables at which to compute derivatives
+    size_t num_derivatives    // Number of derivatives to compute
+) {
+  using ADScalar = CppAD::AD<Scalar>;
+
+  size_t n = X.size();
+
+  // Convert X to AD types
+  ADVector X_ad(n);
+  for (size_t i = 0; i < n; ++i) {
+    X_ad[i] = X[i];
   }
-  std::cout << "]\n";
-}
 
-template <typename Func>
-int run_solver(const Func& F, int dim, const std::string& system_name,
-               bool newton = false) {
-  // Set some solver options
-  SolveOptions options;
-  options.debug = false;        // Print debug information
-  options.tolerance = 1e-8;     // Tight convergence tolerance
-  options.maxIterations = 100;  // Maximum Newton iterations
-  options.verifyDerivatives = true;
+  // Start recording with X_ad as independent variables
+  CppAD::Independent(X_ad);
 
-  try {
-    // Solve the circle-line system with explicit dimension
-    if (!newton) {
-      auto result1 = solve(F, dim, options);  // 2D input
-      if (result1) {
-        print_solution(*result1, system_name);
-      } else {
-        std::cout << "No Solution!\n";
-      }
-    } else {
-      auto result1 = solve_newton(F, dim, options);  // 2D input
-      if (result1) {
-        print_solution(*result1, system_name);
-      } else {
-        std::cout << "No Solution!\n";
+  // Compute F(X)
+  ADVector F_ad = ode_function(X_ad);
+
+  // Create the function object F_fun: X_ad -> F_ad
+  CppAD::ADFun<Scalar> F_fun(X_ad, F_ad);
+
+  // Initialize the vector to store the Taylor coefficients of x(t)
+  // The zeroth-order coefficient is X
+  Vector<Scalar> x_taylor(n * num_derivatives, Scalar(0));
+  for (size_t i = 0; i < n; ++i) {
+    x_taylor[i * num_derivatives + 0] = X[i];
+  }
+
+  // Initialize vector to store the time derivatives
+  std::vector<Vector<Scalar>> derivatives(num_derivatives,
+                                          Vector<Scalar>(n, Scalar(0)));
+
+  // Loop to compute Taylor coefficients of x(t) up to the desired order
+  for (size_t k = 1; k <= num_derivatives; ++k) {
+    // Prepare x_taylor_k, which contains x^{(0)}, ..., x^{(k-1)} for order k
+    Vector<Scalar> x_taylor_k(n * k, Scalar(0));
+    for (size_t i = 0; i < n; ++i) {
+      for (size_t j = 0; j < k; ++j) {
+        x_taylor_k[i * k + j] = x_taylor[i * num_derivatives + j];
       }
     }
 
-  } catch (const std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
-    return 1;
+    // Compute the k-th order Taylor coefficients of F(x)
+    Vector<Scalar> f_taylor_k = F_fun.Forward(k - 1, x_taylor_k);
+
+    // Update the k-th derivative of x(t)
+    for (size_t i = 0; i < n; ++i) {
+      // x^{(k)} = f^{(k-1)} / k
+      Scalar xk = f_taylor_k[i] / Scalar(k);
+      x_taylor[i * num_derivatives + k] = xk;
+      derivatives[k - 1][i] = xk * pow(Scalar(k), k);  // Adjusted for scaling
+    }
+  }
+
+  return derivatives;
+}
+
+// Function to integrate and observe
+template <typename T, typename F1, typename F2>
+std::vector<observable_vector<T>> integrate_and_observe(
+    const ODESystem<T, F1, F2>& system, const std::vector<T>& time_values) {
+  state_vector<T> state = system.getInitialState();
+  std::vector<observable_vector<T>> observables;
+
+  auto observer = [&](const state_vector<T>& x, const T& /* t */) {
+    observable_vector<T> y;
+    system.observe(x, y);
+    observables.push_back(y);
+  };
+
+  typedef runge_kutta4<state_vector<T>, T, state_vector<T>, T> stepper_type;
+  integrate_times(stepper_type(), system, state, time_values.begin(),
+                  time_values.end(), T(0.01), observer);
+  return observables;
+}
+
+void example_parameter_estimation() {
+  // Define the time points at which we observe the system
+  std::vector<double> time_values = {0.0, 0.5, 1.0, 1.5, 2.0};
+
+  // True parameters and initial state
+  parameter_vector<double> true_params = {1.3, 1.8};
+  state_vector<double> true_initial_state = {1.0, 0.5};
+
+  // Define the state equations function
+  auto state_equations_main =
+      [](const state_vector<double>& x, state_vector<double>& dxdt,
+         const parameter_vector<double>& p, const double& /* t */) {
+        dxdt.resize(2);
+        dxdt[0] = p[0] * x[0];
+        dxdt[1] = p[1] * x[1];
+      };
+
+  // Define the observation function
+  auto observation_function_main = [](const state_vector<double>& x,
+                                      observable_vector<double>& y) {
+    y.resize(2);
+    y[0] = x[0];
+    y[1] = x[1];
+  };
+
+  // Create the ODESystem instance
+  ODESystem<double, decltype(state_equations_main),
+            decltype(observation_function_main)>
+      true_system(true_params, state_equations_main, observation_function_main);
+  true_system.setInitialState(true_initial_state);
+
+  // Generate ground truth observables
+  auto ground_truth = integrate_and_observe(true_system, time_values);
+
+  // Display ground truth data
+  for (size_t i = 0; i < time_values.size(); ++i) {
+    std::cout << "t = " << time_values[i] << ", Observables: ";
+    for (const auto& val : ground_truth[i]) {
+      std::cout << val << " ";
+    }
+    std::cout << "\n";
+  }
+
+  using T = ADDouble;
+
+  // Objective function for parameter estimation
+  auto parameter_objective =
+      [time_values, &ground_truth](const ADVector& params) -> ADVector {
+    // Extract parameters and initial state
+    size_t param_size = 2;
+    size_t state_size = 2;
+    parameter_vector<T> p(params.data(), params.data() + param_size);
+    state_vector<T> initial_state(params.data() + param_size,
+                                  params.data() + param_size + state_size);
+
+    // Define the state equations function
+    auto state_equations = [](const state_vector<T>& x, state_vector<T>& dxdt,
+                              const parameter_vector<T>& lp, const T& /* t */) {
+      dxdt.resize(2);
+      dxdt[0] = lp[0] * x[0];
+      dxdt[1] = lp[1] * x[1];  //+ x[0] * T(0.1);
+    };
+
+    // Define the observation function
+    auto observation_function = [](const state_vector<T>& x,
+                                   observable_vector<T>& y) {
+      y.resize(2);
+      y[0] = x[0];
+      y[1] = x[1];
+    };
+
+    // Create the ODESystem instance
+    ODESystem<T, decltype(state_equations), decltype(observation_function)>
+        system(p, state_equations, observation_function);
+    system.setInitialState(initial_state);
+
+    // Simulate the system
+    std::vector<T> ad_time_values(time_values.begin(), time_values.end());
+    auto simulated_observables = integrate_and_observe(system, ad_time_values);
+
+    // Display current interation observations
+
+    for (size_t i = 0; i < time_values.size(); ++i) {
+      std::cout << "t = " << time_values[i] << ", Observables: ";
+      for (const auto& val : simulated_observables[i]) {
+        std::cout << val << " ";
+      }
+      std::cout << "\n";
+    }
+
+    // Calculate residuals
+
+    auto observable_length = simulated_observables[0].size();
+    // size_t total_residuals =
+    //     simulated_observables.size() * 2;  // observable_size = 2
+    ADVector residuals(observable_length * 2);
+
+    size_t observable_count = simulated_observables.size();
+    size_t midpoint = observable_count / 2;
+
+    size_t idx = 0;
+    size_t i = 0;
+    for (size_t j = 0; j < simulated_observables[i].size(); ++j) {
+      residuals[idx++] = simulated_observables[i][j] - T(ground_truth[i][j]);
+    }
+    i = midpoint;
+    for (size_t j = 0; j < simulated_observables[i].size(); ++j) {
+      residuals[idx++] = simulated_observables[i][j] - T(ground_truth[i][j]);
+    }
+
+    return residuals;
+  };
+
+  // Set solver options
+  SolveOptions options;
+  options.debug = true;
+  options.tolerance = 1e-6;
+  options.maxIterations = 50;
+  options.initialStepSize = 0.1;
+  options.verifyDerivatives = true;
+
+  // Initial guess for parameters and initial state
+  ADVector initial_params(4);
+  initial_params[0] = 1.0;  // Guess for parameter p[0]
+  initial_params[1] = 1.0;  // Guess for parameter p[1]
+  initial_params[2] = 1.0;  // Guess for initial_state[0]
+  initial_params[3] = 0.5;  // Guess for initial_state[1]
+
+  // Solve the parameter estimation problem
+  auto result = solve(parameter_objective, 4,  // initial_params,
+                      options);
+
+  if (result) {
+    std::cout << "\nSolution found!\n";
+    std::cout << "Estimated parameters: ";
+    for (size_t i = 0; i < 2; ++i) {  // parameter_size = 2
+      std::cout << CppAD::Value(result->solution[i]) << " ";
+    }
+    std::cout << "\nEstimated initial state: ";
+    for (size_t i = 2; i < 4; ++i) {  // state_size = 2
+      std::cout << CppAD::Value(result->solution[i]) << " ";
+    }
+    std::cout << "\nResidual norm: " << result->residualNorm << "\n";
+    std::cout << "Iterations: " << result->iterations << "\n";
+  } else {
+    std::cout << "Failed to find solution\n";
+  }
+}
+
+template <typename VectorType>
+VectorType ode_system(const VectorType& y) {
+  size_t n = y.size();
+  VectorType dy_dt(n);
+  dy_dt[0] = 1;  // Example: dy_0/dt = 1
+  for (size_t k = 1; k < n; ++k) {
+    dy_dt[k] = y[k - 1];  // dy_k/dt = y_{k-1}
+  }
+  return dy_dt;
+}
+
+int main() {  // example_parameter_estimation();
+  // Initial state variables
+  ADVector X(5);
+  X << 0.0, 0.0, 0.0, 0.0, 0.0;
+
+  // Number of derivatives to compute
+  size_t num_derivatives = 5;
+
+  // Compute derivatives
+  auto derivatives = compute_time_derivatives(
+      ode_system<Vector<CppAD::AD<double>>>, X, num_derivatives);
+
+  // Output the derivatives
+  std::cout << "Time derivatives at X:\n";
+  for (size_t k = 0; k < derivatives.size(); ++k) {
+    std::cout << "Order " << k + 1 << " derivatives:\n";
+    for (size_t i = 0; i < derivatives[k].size(); ++i) {
+      std::cout << "  Variable " << i << ": " << derivatives[k][i] << "\n";
+    }
   }
 
   return 0;
-}
-
-int main() {
-  std::cout << "HC-MC Example: Solving Nonlinear Systems\n";
-  std::cout << "========================================\n";
-
-  // Example 1: Circle-Line intersection
-  // System: { x^2 + y^2 = 1  (unit circle)
-  //        { x + y = 1     (line)
-  auto circle_line = [](const ADVector& X) {
-    ADVector result(2);
-    result(0) = X(0) * X(0) + X(1) * X(1) - 1.0;  // Circle equation
-    result(1) = X(0) + X(1) - 1.0;                // Line equation
-    return result;
-  };
-
-  // Example 2: Chemical equilibrium
-  // A simple chemical equilibrium problem:
-  // System: { xy = K     (equilibrium constant)
-  //        { x + y = 1   (mass balance)
-  auto chemical_eq = [](const ADVector& X) {
-    const double K = 0.1;  // equilibrium constant
-    ADVector result(2);
-    result(0) = X(0) * X(1) - K;    // equilibrium equation
-    result(1) = X(0) + X(1) - 1.0;  // mass balance
-    return result;
-  };
-
-  auto quadratic = [](const ADVector& X) {
-    ADVector result(1);
-    result(0) = 4.0 * X(0) * X(0) + 2 * X(0) - 1.0;
-    return result;
-  };
-
-  auto quartic = [](const ADVector& X) {
-    ADVector result(1);
-    const auto& z = X(0);
-    result(0) = 4.0 * z * z * z * z - 25.0 * z * z * z + z * z - z + 3.0;
-    return result;
-  };
-
-  auto parabola_line = [](const ADVector& X) {
-    ADVector result(2);
-    result(0) = X(0) * X(0) - X(1);  // Parabola y = x^2
-    result(1) = X(1) - 4.0;          // Line y = 4
-    return result;
-  };
-
-  auto higher_dim = [](const ADVector& X) {
-    ADVector result(4);
-    result(0) = X(0) * X(0) * X(0) + CppAD::sin(X(1)) - 1.0;
-    result(1) = X(0) * X(0) + X(1) * X(1) + X(2) * X(2) + X(3) * X(3) - 5.0;
-    result(2) = X(0) + X(1) + X(2) + CppAD::pow(X(3), 5) + 2.5;
-    result(3) = CppAD::sin(X(0)) + CppAD::exp(X(1)) +
-                CppAD::cos(X(1)) * X(2) * X(2) * X(2) + 2.0;
-    return result;
-  };
-
-  run_solver(quadratic, 1, "Quadratic", true);
-  run_solver(circle_line, 2, "Circle/Line Intersection", true);
-  run_solver(chemical_eq, 2, "Chemical Equilibrium,", true);
-  run_solver(quartic, 1, "Quartic,", true);
-  run_solver(parabola_line, 2, "Parabola/Line Intersection,", true);
-  run_solver(higher_dim, 4, "Higher Dimensional System,", true);
-  /*
-  run_solver(quadratic, 1, "Quadratic");
-  run_solver(circle_line, 2, "Circle/Line Intersection");
-  run_solver(chemical_eq, 2, "Chemical Equilibrium,");
-  run_solver(quartic, 1, "Quartic,");
-  run_solver(parabola_line, 2, "Parabola/Line Intersection,");
-  run_solver(higher_dim, 4, "Higher Dimensional System,");
-  */
 }

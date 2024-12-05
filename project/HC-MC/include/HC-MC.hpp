@@ -32,29 +32,7 @@
 #include <random>
 #include <string>
 
-// Type aliases to improve readability
-template <typename Base>
-using AD = CppAD::AD<Base>;
-using ADDouble = AD<double>;
-
-template <typename T>
-using Vector = Eigen::Matrix<T, Eigen::Dynamic, 1>;
-template <typename T>
-using Matrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
-
-using ADVector = Vector<ADDouble>;
-using DoubleVector = Vector<double>;
-
-// Helper type trait to get base type
-template <typename T>
-struct BaseType {
-  using type = T;
-};
-
-template <typename Base>
-struct BaseType<AD<Base>> {
-  using type = Base;
-};
+#include "types.hpp"
 
 // Configuration and result structures
 struct SolveOptions {

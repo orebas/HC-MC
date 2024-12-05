@@ -1,0 +1,9 @@
+Package: eigen3
+Version: 3.4.0
+Port-Version: 4
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 4185cf3c855f79735dca623ebbf616ba9b2216b1f01df6c60a6faac17fcf7f03
+Description: C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms.
+Status: install ok installed

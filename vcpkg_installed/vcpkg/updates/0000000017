@@ -1,0 +1,8 @@
+Package: doctest
+Version: 2.4.11
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-linux
+Multi-Arch: same
+Abi: 0b5357db8783b401921996752edfbe9f972c87714a6a8423e6f56a5cbd969254
+Description: The fastest feature-rich C++11/14/17/20 single-header testing framework
+Status: install ok installed

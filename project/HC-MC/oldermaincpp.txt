@@ -1,0 +1,126 @@
+#include <iomanip>
+#include <iostream>
+
+#include "HC-MC.hpp"
+
+// Helper function to print solutions nicely
+void print_solution(const SolveResult& result, const std::string& system_name) {
+  std::cout << "\n=== " << system_name << " ===\n";
+  std::cout << "Success: " << (result.success ? "Yes" : "No") << "\n";
+  std::cout << "Residual norm: " << result.residualNorm << "\n";
+  std::cout << "Iterations: " << result.iterations << "\n";
+  std::cout << "Solution: [";
+  for (int i = 0; i < result.solution.size(); ++i) {
+    std::cout << std::setprecision(8) << CppAD::Value(result.solution(i));
+    if (i < result.solution.size() - 1) std::cout << ", ";
+  }
+  std::cout << "]\n";
+}
+
+template <typename Func>
+int run_solver(const Func& F, int dim, const std::string& system_name,
+               bool newton = false) {
+  // Set some solver options
+  SolveOptions options;
+  options.debug = false;        // Print debug information
+  options.tolerance = 1e-8;     // Tight convergence tolerance
+  options.maxIterations = 100;  // Maximum Newton iterations
+  options.verifyDerivatives = true;
+
+  try {
+    // Solve the circle-line system with explicit dimension
+    if (!newton) {
+      auto result1 = solve(F, dim, options);  // 2D input
+      if (result1) {
+        print_solution(*result1, system_name);
+      } else {
+        std::cout << "No Solution!\n";
+      }
+    } else {
+      auto result1 = solve_newton(F, dim, options);  // 2D input
+      if (result1) {
+        print_solution(*result1, system_name);
+      } else {
+        std::cout << "No Solution!\n";
+      }
+    }
+
+  } catch (const std::exception& e) {
+    std::cerr << "Error: " << e.what() << std::endl;
+    return 1;
+  }
+
+  return 0;
+}
+
+int main() {
+  std::cout << "HC-MC Example: Solving Nonlinear Systems\n";
+  std::cout << "========================================\n";
+
+  // Example 1: Circle-Line intersection
+  // System: { x^2 + y^2 = 1  (unit circle)
+  //        { x + y = 1     (line)
+  auto circle_line = [](const ADVector& X) {
+    ADVector result(2);
+    result(0) = X(0) * X(0) + X(1) * X(1) - 1.0;  // Circle equation
+    result(1) = X(0) + X(1) - 1.0;                // Line equation
+    return result;
+  };
+
+  // Example 2: Chemical equilibrium
+  // A simple chemical equilibrium problem:
+  // System: { xy = K     (equilibrium constant)
+  //        { x + y = 1   (mass balance)
+  auto chemical_eq = [](const ADVector& X) {
+    const double K = 0.1;  // equilibrium constant
+    ADVector result(2);
+    result(0) = X(0) * X(1) - K;    // equilibrium equation
+    result(1) = X(0) + X(1) - 1.0;  // mass balance
+    return result;
+  };
+
+  auto quadratic = [](const ADVector& X) {
+    ADVector result(1);
+    result(0) = 4.0 * X(0) * X(0) + 2 * X(0) - 1.0;
+    return result;
+  };
+
+  auto quartic = [](const ADVector& X) {
+    ADVector result(1);
+    const auto& z = X(0);
+    result(0) = 4.0 * z * z * z * z - 25.0 * z * z * z + z * z - z + 3.0;
+    return result;
+  };
+
+  auto parabola_line = [](const ADVector& X) {
+    ADVector result(2);
+    result(0) = X(0) * X(0) - X(1);  // Parabola y = x^2
+    result(1) = X(1) - 4.0;          // Line y = 4
+    return result;
+  };
+
+  auto higher_dim = [](const ADVector& X) {
+    ADVector result(4);
+    result(0) = X(0) * X(0) * X(0) + CppAD::sin(X(1)) - 1.0;
+    result(1) = X(0) * X(0) + X(1) * X(1) + X(2) * X(2) + X(3) * X(3) - 5.0;
+    result(2) = X(0) + X(1) + X(2) + CppAD::pow(X(3), 5) + 2.5;
+    result(3) = CppAD::sin(X(0)) + CppAD::exp(X(1)) +
+                CppAD::cos(X(1)) * X(2) * X(2) * X(2) + 2.0;
+    return result;
+  };
+
+  run_solver(quadratic, 1, "Quadratic", true);
+  run_solver(circle_line, 2, "Circle/Line Intersection", true);
+  run_solver(chemical_eq, 2, "Chemical Equilibrium,", true);
+  run_solver(quartic, 1, "Quartic,", true);
+  run_solver(parabola_line, 2, "Parabola/Line Intersection,", true);
+  run_solver(higher_dim, 4, "Higher Dimensional System,", true);
+  /*
+  run_solver(quadratic, 1, "Quadratic");
+  run_solver(circle_line, 2, "Circle/Line Intersection");
+  run_solver(chemical_eq, 2, "Chemical Equilibrium,");
+  run_solver(quartic, 1, "Quartic,");
+  run_solver(parabola_line, 2, "Parabola/Line Intersection,");
+  run_solver(higher_dim, 4, "Higher Dimensional System,");
+  */
+}

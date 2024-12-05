@@ -1,0 +1,110 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/cppad-x64-linux-20240000.7-01ee777e-03f6-4a0c-a145-612188fbe91a",
+  "name": "cppad:x64-linux@20240000.7 3ad73c8f5eb4a871c8f87bb9b2f57deef65b735c8367c696489f58e04fc0b111",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-2024-11-12-eb492805e92a2c14a230f5c3deb3e89f6771c321"
+    ],
+    "created": "2024-11-14T16:25:03Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "cppad",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "20240000.7",
+      "downloadLocation": "git+https://github.com/Microsoft/vcpkg@d69e902bac2437d6ccb8828d183d1d00d5ff8a4b",
+      "homepage": "https://github.com/coin-or/CppAD",
+      "licenseConcluded": "EPL-2.0",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "CppAD: A Package for Differentiation of C++ Algorithms",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "cppad:x64-linux",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "3ad73c8f5eb4a871c8f87bb9b2f57deef65b735c8367c696489f58e04fc0b111",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "EPL-2.0",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-1",
+      "name": "coin-or/CppAD",
+      "downloadLocation": "git+https://github.com/coin-or/CppAD@20240000.7",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "a2e9b90246a78319d2a50347e03ee7a4e807e059200d834290981b5fc4ff99e1964c420f606a36b6cacb21d5b254f34edbafa660242b260a828e2259686f40cd"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": ".//home/orebas/testing-delme/HC-MC/external/vcpkg/buildtrees/versioning_/versions/cppad/d69e902bac2437d6ccb8828d183d1d00d5ff8a4b/portfile.cmake",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e8520ae6cbabf244daa36f9d4b360f46fa1c3b9e7945124a07e154f3d8e03fbe"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": ".//home/orebas/testing-delme/HC-MC/external/vcpkg/buildtrees/versioning_/versions/cppad/d69e902bac2437d6ccb8828d183d1d00d5ff8a4b/vcpkg.json",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8b2f6e217174be0ac7757955d631106a366946865c3b5c9abcc27c4d795dd6b9"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}
