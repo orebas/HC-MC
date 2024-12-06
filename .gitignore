@@ -14,6 +14,7 @@ vcpkg_installed/
 # Specific build directories that might appear elsewhere
 **/x64-linux-dbg/
 **/x64-linux-rel/
+.cache
 
 # CMake build artifacts
 **/CMakeFiles/

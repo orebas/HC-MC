@@ -17,7 +17,7 @@ class TaylorSeries {
 
  public:
   // Constructor initializes all coefficients to zero
-  TaylorSeries(const T &constant, int degree_in = 0)
+  explicit TaylorSeries(const T &constant, int degree_in = 0)
       : degree(degree_in), coefficients(degree_in + 1, T(0)) {
     coefficients[0] = constant;
   }
@@ -277,7 +277,8 @@ class TaylorSeries {
     // Handle even vs odd exponents
     TaylorSeries half = pow(x, exponent / 2);
     TaylorSeries result = half * half;
-    if (static_cast<int>(exponent) & 1) {
+    // For odd exponents, multiply by x one additional time
+    if (exponent % 2 == 1) {
       result = result * x;
     }  // Use bitwise AND to check if odd
     return result;

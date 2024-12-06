@@ -71,7 +71,7 @@ double toDouble(const T& x) {
   }
 }
 
-// Random vector generator in [-1,1]
+// Random vector generator in [0,2]
 template <typename T>
 Vector<T> randomVector(int size) {
   static std::random_device rd;
@@ -80,7 +80,7 @@ Vector<T> randomVector(int size) {
 
   Vector<T> result(size);
   for (auto i = 0; i < size; ++i) {
-    result(i) = T(dis(gen));
+    result(i) = T(dis(gen)) + T(1.0);
   }
   return result;
 }

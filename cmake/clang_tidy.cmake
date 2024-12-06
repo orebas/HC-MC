@@ -4,14 +4,15 @@ find_program(CLANG_TIDY_BIN NAMES clang-tidy)
 if(CLANG_TIDY_BIN)
     message(STATUS "Found: clang-tidy")
     
-    # Don't set CMAKE_CXX_CLANG_TIDY - we don't want it running on every build
-    
     # Get all source files
     file(GLOB_RECURSE ALL_SOURCE_FILES 
         ${PROJECT_SOURCE_DIR}/project/*.cpp
         ${PROJECT_SOURCE_DIR}/project/*.h
         ${PROJECT_SOURCE_DIR}/project/*.hpp
     )
+
+    # Remove mpreal.h from the list
+    list(FILTER ALL_SOURCE_FILES EXCLUDE REGEX ".*mpreal\\.h$")
 
     # Create a custom target for running clang-tidy
     add_custom_target(
