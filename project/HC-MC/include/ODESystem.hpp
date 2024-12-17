@@ -45,13 +45,14 @@ class ODESystem {
   ObservationFunctionTemplate<T> observation_function;
 
   ODESystem(const ParamType& params, const StateFunctionTemplate<T>& state_func,
-            const ObservationFunctionTemplate<T>& obs_func)
+            const ObservationFunctionTemplate<T>& obs_func, int state_size_in,
+            int observable_size_in)
       : state_equations(state_func),
         observation_function(obs_func),
         parameters(params),
         parameter_size(params.size()),
-        state_size(0),
-        observable_size(0) {}
+        state_size(state_size_in),
+        observable_size(observable_size_in) {}
 
   // Accessors
   const ParamType& getParameters() const { return parameters; }
@@ -101,9 +102,6 @@ class ODESystem {
   // Observation function
   void observe(const StateType& x, ObsType& y) const {
     observation_function(x, y);
-    if (observable_size == 0) {
-      observable_size = y.size();  // Set on first call
-    }
   }
 
   // Shrinking the ODE system by fixing parameters:
@@ -167,7 +165,9 @@ class ODESystem {
     auto new_obs = observation_function;  // same observation function
 
     ODESystem<T, StateFunctionTemplate, ObservationFunctionTemplate>
-        reducedSystem(newParams, new_state_equations, new_obs);
+        reducedSystem(
+            newParams, new_state_equations,
+            new_obs);  // TODO(orebas): fix state size and observable size
     reducedSystem.setInitialState(this->initial_state);
     return reducedSystem;
   }
@@ -264,109 +264,133 @@ class ODESystem {
     return reducedSystem;
   }
 
-  // Compute Taylor series expansion of the state around time t0
-  // The idea:
-  //  X(t) = X(t0) + (t - t0)*X'(t0) + (t - t0)^2/2!*X''(t0) + ...
-  // We use the provided TaylorSeries class to store coefficients.
-  // This requires that state_equations can operate on TaylorSeries<T> as input.
+  /*
+    // Compute Taylor series expansion of the state around time t0
+    // The idea:
+    //  X(t) = X(t0) + (t - t0)*X'(t0) + (t - t0)^2/2!*X''(t0) + ...
+    // We use the provided TaylorSeries class to store coefficients.
+    // This requires that state_equations can operate on TaylorSeries<T> as
+    input. std::vector<TaylorSeries<T>> computeTaylorSeriesOfState(const T& t0,
+                                                            int degree) const {
+      // Initialize TaylorSeries for each state variable
+      std::vector<TaylorSeries<T>> series;
+      series.reserve(state_size);
+      for (size_t i = 0; i < state_size; ++i) {
+        TaylorSeries<T> ts(initial_state[i], degree);
+        ts[0] = initial_state[i];  // constant term
+        series.push_back(ts);
+      }
+
+      // We'll do a recursive approach:
+      // For i=1 to degree:
+      //   Evaluate F at t0 with the current expansions.
+      //   The linear terms in t give first derivative, etc.
+      //
+      // However, a direct approach:
+      // If we let the input be TaylorSeries(t0 + h), we can call F with x
+      // represented as expansions. Then we solve for coefficients by matching
+      // terms of equal powers of h.
+      //
+      // A simpler (though less general) approach:
+      //   For the first derivative: dxdt at t0 is just F(X(t0), p, t0).
+      //   For the second derivative: we differentiate again by applying chain
+      //   rule, etc.
+      // But we haven't implemented a general chain rule here. We assume that
+      // `state_equations` can handle TaylorSeries to produce all higher
+      // derivatives automatically.
+      //
+      // Let's represent time as a TaylorSeries around t0: T(t) = t0 + h, with h
+      // as the variable. We'll create a TaylorSeries<T> for time: t_series = t0
+    +
+      // h where h is the expansion variable.
+      TaylorSeries<T> t_series(t0, degree);
+      // h = t - t0, so t_series[0] = t0, and t_series[1] = 1, and others 0
+      // Actually, since evaluate methods rely on expansions:
+      // Let's set up: t_series[0] = t0, t_series[1] = 1.0;
+      t_series[0] = t0;
+      if (degree > 0) {
+        t_series[1] = T(1);
+      }
+
+      // At each step i, we will compute dx/dt = F(X, p, t_series)
+      // X is currently known as a TaylorSeries expansion to order i-1.
+      // We can call state_equations with these series. It should produce dxdt
+    as
+      // a series. Then we match coefficients to fill in series[*][i].
+
+      // Convert parameters to TaylorSeries as well (constant expansions)
+      std::vector<TaylorSeries<T>> p_series(parameters.size(),
+                                            TaylorSeries<T>(T(0), degree));
+      for (size_t i = 0; i < parameters.size(); ++i) {
+        p_series[i][0] = parameters[i];  // parameter is constant w.r.t time
+      }
+
+      for (int i = 1; i <= degree; ++i) {
+        // Prepare x_series for input
+        std::vector<TaylorSeries<T>> x_series =
+            series;  // copy current expansions
+        std::vector<TaylorSeries<T>> dxdt_series(state_size,
+                                                 TaylorSeries<T>(T(0), degree));
+
+        // Call state_equations but templated on TaylorSeries<T>
+        // We'll create a small adapter that calls the template:
+        {
+          // Wrap parameters in a lambda that uses TaylorSeries:
+          auto eq = [this](const std::vector<TaylorSeries<T>>& x,
+                           std::vector<TaylorSeries<T>>& dxdt,
+                           const std::vector<TaylorSeries<T>>& p,
+                           const TaylorSeries<T>& tt) {
+            // Extract plain arrays for calling original functor:
+            // Here we rely on the fact that `state_equations` is already
+            // templated. state_equations(x, dxdt, p, t)
+            this->state_equations(x, dxdt, p, tt);
+          };
+
+          eq(x_series, dxdt_series, p_series, t_series);
+        }
+
+        // Now, dxdt_series[j][n] corresponds to nth derivative terms. By
+        // definition:
+        //   series[j][i] = dxdt[j][i-1] / i   (to get ith coefficient)
+        // Because coefficient for order i in Taylor series = f^(i)(t0)/i!
+        // dxdt_series gives the derivative expansions. The linear term in
+        // dxdt_series is dx/dt at t0, etc. We must ensure that we properly
+        // extract the i-th coefficient from dxdt_series. dxdt_series[j][i-1]
+        // should give us the i-th derivative * i!. But we've constructed
+        // dxdt_series so that [k] is the k-th coefficient i.e.,
+        // dxdt_series[j][i-1] is actually the (i-1)-th derivative / (i-1)! ?
+    For
+        // simplicity, assume dxdt_series is computed similarly so that:
+        //   series[j][i] = dxdt_series[j][i-1] / i
+        // This matches the pattern in the provided `computeODECoefficients`
+        // snippet.
+
+        for (size_t j = 0; j < state_size; ++j) {
+          series[j][i] = dxdt_series[j][i - 1] / T(i);
+        }
+      }
+
+      return series;
+    }*/
+
   std::vector<TaylorSeries<T>> computeTaylorSeriesOfState(const T& t0,
                                                           int degree) const {
-    // Initialize TaylorSeries for each state variable
-    std::vector<TaylorSeries<T>> series;
-    series.reserve(state_size);
-    for (size_t i = 0; i < state_size; ++i) {
-      TaylorSeries<T> ts(initial_state[i], degree);
-      ts[0] = initial_state[i];  // constant term
-      series.push_back(ts);
-    }
-
-    // We'll do a recursive approach:
-    // For i=1 to degree:
-    //   Evaluate F at t0 with the current expansions.
-    //   The linear terms in t give first derivative, etc.
-    //
-    // However, a direct approach:
-    // If we let the input be TaylorSeries(t0 + h), we can call F with x
-    // represented as expansions. Then we solve for coefficients by matching
-    // terms of equal powers of h.
-    //
-    // A simpler (though less general) approach:
-    //   For the first derivative: dxdt at t0 is just F(X(t0), p, t0).
-    //   For the second derivative: we differentiate again by applying chain
-    //   rule, etc.
-    // But we haven't implemented a general chain rule here. We assume that
-    // `state_equations` can handle TaylorSeries to produce all higher
-    // derivatives automatically.
-    //
-    // Let's represent time as a TaylorSeries around t0: T(t) = t0 + h, with h
-    // as the variable. We'll create a TaylorSeries<T> for time: t_series = t0 +
-    // h where h is the expansion variable.
-    TaylorSeries<T> t_series(t0, degree);
-    // h = t - t0, so t_series[0] = t0, and t_series[1] = 1, and others 0
-    // Actually, since evaluate methods rely on expansions:
-    // Let's set up: t_series[0] = t0, t_series[1] = 1.0;
-    t_series[0] = t0;
-    if (degree > 0) {
-      t_series[1] = T(1);
-    }
-
-    // At each step i, we will compute dx/dt = F(X, p, t_series)
-    // X is currently known as a TaylorSeries expansion to order i-1.
-    // We can call state_equations with these series. It should produce dxdt as
-    // a series. Then we match coefficients to fill in series[*][i].
-
-    // Convert parameters to TaylorSeries as well (constant expansions)
-    std::vector<TaylorSeries<T>> p_series(parameters.size(),
-                                          TaylorSeries<T>(T(0), degree));
-    for (size_t i = 0; i < parameters.size(); ++i) {
-      p_series[i][0] = parameters[i];  // parameter is constant w.r.t time
-    }
-
-    for (int i = 1; i <= degree; ++i) {
-      // Prepare x_series for input
-      std::vector<TaylorSeries<T>> x_series =
-          series;  // copy current expansions
-      std::vector<TaylorSeries<T>> dxdt_series(state_size,
-                                               TaylorSeries<T>(T(0), degree));
-
-      // Call state_equations but templated on TaylorSeries<T>
-      // We'll create a small adapter that calls the template:
-      {
-        // Wrap parameters in a lambda that uses TaylorSeries:
-        auto eq = [this](const std::vector<TaylorSeries<T>>& x,
-                         std::vector<TaylorSeries<T>>& dxdt,
-                         const std::vector<TaylorSeries<T>>& p,
-                         const TaylorSeries<T>& tt) {
-          // Extract plain arrays for calling original functor:
-          // Here we rely on the fact that `state_equations` is already
-          // templated. state_equations(x, dxdt, p, t)
-          this->state_equations(x, dxdt, p, tt);
-        };
-
-        eq(x_series, dxdt_series, p_series, t_series);
+    // Create a wrapper that adapts our state_equations to the interface
+    // expected by computeODECoefficients
+    auto wrapped_system = [this, &t0](
+                              const std::vector<TaylorSeries<T>>& series,
+                              std::vector<TaylorSeries<T>>& result) {
+      // Convert parameters to TaylorSeries (as constants)
+      std::vector<TaylorSeries<T>> p_series;
+      p_series.reserve(parameters.size());
+      for (const auto& p : parameters) {
+        p_series.emplace_back(p, series[0].getDegree());
       }
+      // Call state_equations with the wrapped parameters
+      StateFunctionTemplate<TaylorSeries<T>>()(series, result, p_series, t0);
+    };
 
-      // Now, dxdt_series[j][n] corresponds to nth derivative terms. By
-      // definition:
-      //   series[j][i] = dxdt[j][i-1] / i   (to get ith coefficient)
-      // Because coefficient for order i in Taylor series = f^(i)(t0)/i!
-      // dxdt_series gives the derivative expansions. The linear term in
-      // dxdt_series is dx/dt at t0, etc. We must ensure that we properly
-      // extract the i-th coefficient from dxdt_series. dxdt_series[j][i-1]
-      // should give us the i-th derivative * i!. But we've constructed
-      // dxdt_series so that [k] is the k-th coefficient i.e.,
-      // dxdt_series[j][i-1] is actually the (i-1)-th derivative / (i-1)! ? For
-      // simplicity, assume dxdt_series is computed similarly so that:
-      //   series[j][i] = dxdt_series[j][i-1] / i
-      // This matches the pattern in the provided `computeODECoefficients`
-      // snippet.
-
-      for (size_t j = 0; j < state_size; ++j) {
-        series[j][i] = dxdt_series[j][i - 1] / T(i);
-      }
-    }
-
-    return series;
+    return computeODECoefficients(this->initial_state, wrapped_system, degree);
   }
 
   // Compute Taylor series of the observables:
@@ -383,7 +407,7 @@ class ODESystem {
     std::vector<TaylorSeries<T>> y_series(
         observable_size, TaylorSeries<T>(T(0), x_series[0].getDegree()));
 
-    observation_function(x_series, y_series);
+    ObservationFunctionTemplate<TaylorSeries<T>>()(x_series, y_series);
     return y_series;
   }
 

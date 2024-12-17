@@ -1,7 +1,6 @@
 #ifndef AAA_HPP
 #define AAA_HPP
 
-#include <Eigen/Dense>
 #include <algorithm>
 #include <cmath>
 #include <complex>
@@ -10,6 +9,7 @@
 #include <numeric>
 #include <vector>
 
+#include "eigenwrap.hpp"
 template <typename Scalar>
 class AAA {
  public:

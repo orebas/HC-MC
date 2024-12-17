@@ -13,9 +13,14 @@ class TaylorSeries {
   int degree;                   // Degree of the Taylor series
   std::vector<T> coefficients;  // coefficients[i] represents the i-th
                                 // derivative divided by i!
-  static constexpr T epsilon = std::numeric_limits<T>::epsilon();
+  static const T epsilon;       // Declaration only
 
  public:
+  // Constructor for implicit conversion from base type
+  template <typename U,
+            typename = std::enable_if_t<std::is_convertible_v<U, T>>>
+  TaylorSeries(U value) : TaylorSeries(T(value), 0) {}
+
   // Constructor initializes all coefficients to zero
   explicit TaylorSeries(const T &constant, int degree_in = 0)
       : degree(degree_in), coefficients(degree_in + 1, T(0)) {
@@ -26,9 +31,38 @@ class TaylorSeries {
       : TaylorSeries(T(0), 0) {
   }  // Default constructor delegates to existing constructor
 
+  // Destructor (usually not needed if using only standard library containers)
+  ~TaylorSeries() = default;
+
+  // Move constructor
+  TaylorSeries(TaylorSeries &&other) noexcept
+      : degree(std::exchange(other.degree, 0)),
+        coefficients(std::move(other.coefficients)) {
+    std::cout << "Move constructor called" << std::endl;
+  }
+
+  // Move assignment operator
+  TaylorSeries &operator=(TaylorSeries &&other) noexcept {
+    std::cout << "Move assignment operator called" << std::endl;
+    if (this != &other) {
+      degree = std::exchange(other.degree, 0);
+      coefficients = std::move(other.coefficients);
+    }
+    return *this;
+  }
+
+  // Copy constructor
+  TaylorSeries(const TaylorSeries &other)
+      : degree(other.degree), coefficients(other.coefficients) {
+    std::cout << "Copy constructor called" << std::endl;
+  }
+
   // Access operators
   T &operator[](int idx) { return coefficients[idx]; }
   const T &operator[](int idx) const { return coefficients[idx]; }
+
+  // Get the degree of the Taylor series
+  [[nodiscard]] int getDegree() const { return degree; }
 
   // Basic arithmetic operators
   TaylorSeries operator+(const TaylorSeries &other) const {
@@ -136,7 +170,7 @@ class TaylorSeries {
 
   // Evaluate series at a point
   // Evaluate series at a point x
-  T evaluate(T x_value) const {
+  [[nodiscard]] T evaluate(T x_value) const {
     T x0 = coefficients[0];  // Center of the series
     T h = x_value - x0;      // Deviation from the center
     T result = coefficients[degree];
@@ -147,7 +181,7 @@ class TaylorSeries {
   }
 
   // Get derivative
-  TaylorSeries derivative() const {
+  [[nodiscard]] TaylorSeries derivative() const {
     if (degree == 0) {
       throw std::runtime_error(
           "Cannot take derivative of degree 0 Taylor series");
@@ -285,6 +319,17 @@ class TaylorSeries {
   }
 
   static TaylorSeries tan(const TaylorSeries &x) { return sin(x) / cos(x); }
+
+  TaylorSeries &operator=(const TaylorSeries &other) {
+    std::cout << "Copy assignment operator called" << std::endl;
+    std::cout << "this: " << this << std::endl;
+    std::cout << "other: " << &other << std::endl;
+    if (this != &other) {
+      degree = other.degree;
+      coefficients = other.coefficients;
+    }
+    return *this;
+  }
 };
 
 // Global overloads for transcendental functions
@@ -338,27 +383,31 @@ std::ostream &operator<<(std::ostream &os,
 }
 
 template <typename ODESystemType, typename T>
-
 std::vector<TaylorSeries<T>> computeODECoefficients(const std::vector<T> &X,
                                                     const ODESystemType &O,
                                                     int degree) {
-  int n = X.size();
+  long n = X.size();
   std::vector<TaylorSeries<T>> coefficients;
   coefficients.reserve(X.size());
 
-  // Initialize each TaylorSeries with the given degree
-  for (int i = 0; i < X.size(); i++) {
-    TaylorSeries<T> ts(X[i], degree + 7);
+  // Initialize each TaylorSeries with degree + 1 terms
+  // (degree terms we want plus one for intermediate calculations)
+  for (long i = 0; i < X.size(); i++) {
+    TaylorSeries<T> ts(X[i], degree + 1);
     ts[0] = X[i];  // Set constant term to initial value
     coefficients.push_back(ts);
   }
+
   auto Y = coefficients;
-  for (int i = 1; i < degree + 1; i++) {
+  for (int i = 1; i <= degree; i++) {
     O(coefficients, Y);
-    // std::cout << Y << coefficients << "\n";
     for (int j = 0; j < n; j++) {
       coefficients[j][i] = Y[j][i - 1] / T(i);
     }
   }
+
   return coefficients;
 }
+
+template <typename T>
+const T TaylorSeries<T>::epsilon = std::numeric_limits<T>::epsilon();

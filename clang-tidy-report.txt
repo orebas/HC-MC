@@ -1,0 +1,584 @@
+/home/orebas/cpp/HC-MC/project/HC-MC/include/AAA.hpp:85:23: warning: 2 adjacent parameters of 'fit' of similar type ('const std::vector<Scalar> &') are easily swapped by mistake [bugprone-easily-swappable-parameters]
+   85 | void AAA<Scalar>::fit(const std::vector<Scalar> &Z,
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   86 |                       const std::vector<Scalar> &F, Scalar tol, size_t mmax) {
+      |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/AAA.hpp:85:50: note: the first parameter in the range is 'Z'
+   85 | void AAA<Scalar>::fit(const std::vector<Scalar> &Z,
+      |                                                  ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/AAA.hpp:86:50: note: the last parameter in the range is 'F'
+   86 |                       const std::vector<Scalar> &F, Scalar tol, size_t mmax) {
+      |                                                  ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:146:16: warning: member 'F' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:85:10) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+  146 |   const FuncF& F;
+      |                ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:146:16: warning: member 'F' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:127:12) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:146:16: warning: member 'F' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:155:12) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:146:16: warning: member 'F' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:24:12) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:146:16: warning: member 'F' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:63:12) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:146:16: warning: member 'F' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:95:12) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:146:16: warning: member 'F' of type 'const FuncF &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:147:16: warning: member 'G' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:343:12) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+  147 |   const FuncG& G;
+      |                ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:147:16: warning: member 'G' of type 'const FuncG &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:157:36: warning: 2 adjacent parameters of 'track' of similar type ('const ADDouble &') are easily swapped by mistake [bugprone-easily-swappable-parameters]
+  157 |                                    const ADDouble& t_start,
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~
+  158 |                                    const ADDouble& t_end,
+      |                                    ~~~~~~~~~~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:157:52: note: the first parameter in the range is 't_start'
+  157 |                                    const ADDouble& t_start,
+      |                                                    ^~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:158:52: note: the last parameter in the range is 't_end'
+  158 |                                    const ADDouble& t_end,
+      |                                                    ^~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:234:16: warning: member 'F' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:85:10) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+  234 |   const FuncF& F;
+      |                ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:234:16: warning: member 'F' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:127:12) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:234:16: warning: member 'F' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:155:12) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:234:16: warning: member 'F' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:24:12) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:234:16: warning: member 'F' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:63:12) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:234:16: warning: member 'F' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:95:12) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:234:16: warning: member 'F' of type 'const FuncF &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:235:16: warning: member 'G' of type 'const (lambda at /home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:343:12) &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+  235 |   const FuncG& G;
+      |                ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:235:16: warning: member 'G' of type 'const FuncG &' is a reference [cppcoreguidelines-avoid-const-or-ref-data-members]
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:240:5: warning: do not use namespace using-directives; use using-declarations instead [google-build-using-namespace]
+  240 |     using namespace CppAD;
+      |     ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:240:21: warning: do not use namespace using-directives; use using-declarations instead [google-build-using-namespace]
+  240 |     using namespace CppAD;
+      |                     ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:241:11: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  241 |     const long n = X.size();
+      |           ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:255:10: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  255 |     for (long i = 0; i < n; ++i) {
+      |          ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:263:10: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  263 |     for (long i = 0; i < H_X.size(); ++i) {
+      |          ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:264:12: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  264 |       for (long j = 0; j < n; ++j) {
+      |            ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:279:29: warning: local copy 'jac_double' of the variable 'jac' is never modified; consider avoiding the copy [performance-unnecessary-copy-initialization]
+  279 |       const Eigen::MatrixXd jac_double = jac;
+      |                             ^
+      |                            &
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:412:5: warning: do not use namespace using-directives; use using-declarations instead [google-build-using-namespace]
+  412 |     using namespace CppAD;
+      |     ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:412:21: warning: do not use namespace using-directives; use using-declarations instead [google-build-using-namespace]
+  412 |     using namespace CppAD;
+      |                     ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:413:11: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  413 |     const long n = X.size();
+      |           ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:422:10: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  422 |     for (long i = 0; i < n; ++i) {
+      |          ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:431:10: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  431 |     for (long i = 0; i < F_X.size(); ++i) {
+      |          ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/HC-MC.hpp:432:12: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  432 |       for (long j = 0; j < n; ++j) {
+      |            ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/ODESystem.hpp:48:61: warning: 2 adjacent parameters of 'ODESystem<T, StateFunctionTemplate, ObservationFunctionTemplate>' of similar type ('int') are easily swapped by mistake [bugprone-easily-swappable-parameters]
+   48 |             const ObservationFunctionTemplate<T>& obs_func, int state_size_in,
+      |                                                             ^~~~~~~~~~~~~~~~~~
+   49 |             int observable_size_in)
+      |             ~~~~~~~~~~~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/ODESystem.hpp:48:65: note: the first parameter in the range is 'state_size_in'
+   48 |             const ObservationFunctionTemplate<T>& obs_func, int state_size_in,
+      |                                                                 ^~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/ODESystem.hpp:49:17: note: the last parameter in the range is 'observable_size_in'
+   49 |             int observable_size_in)
+      |                 ^~~~~~~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/ODESystem.hpp:213:7: warning: use range-based for loop instead [modernize-loop-convert]
+  213 |       for (size_t i = 0; i < isFixedState.size(); ++i) {
+      |       ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           (bool i : isFixedState)
+  214 |         if (isFixedState[i]) {
+      |             ~~~~~~~~~~~~~~~
+      |             i
+/home/orebas/cpp/HC-MC/project/HC-MC/include/ODESystem.hpp:240:7: warning: use range-based for loop instead [modernize-loop-convert]
+  240 |       for (size_t i = 0; i < isFixedState.size(); ++i) {
+      |       ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           (bool i : isFixedState)
+  241 |         if (isFixedState[i]) {
+      |             ~~~~~~~~~~~~~~~
+      |             i
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:21:13: warning: use C++20 requires constraints instead of enable_if [modernize-use-constraints]
+   20 |   template <typename U,
+      |                       ~
+   21 |             typename = std::enable_if_t<std::is_convertible_v<U, T>>>
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   22 |   TaylorSeries(U value) : TaylorSeries(T(value), 0) {}
+      |                         requires (std::is_convertible_v<U, T>) 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:22:3: warning: single-argument constructors must be marked explicit to avoid unintentional implicit conversions [google-explicit-constructor,hicpp-explicit-conversions]
+   22 |   TaylorSeries(U value) : TaylorSeries(T(value), 0) {}
+      |   ^
+      |   explicit 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:39:16: error: no matching function for call to 'exchange' [clang-diagnostic-error]
+   39 |       : degree(std::exchange(other.degree, 0)),
+      |                ^~~~~~~~~~~~~
+/usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/stl_construct.h:97:39: note: in instantiation of member function 'TaylorSeries<CppAD::AD<double>>::TaylorSeries' requested here
+   97 |     { return ::new((void*)__location) _Tp(std::forward<_Args>(__args)...); }
+      |                                       ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/atomic_base.h:1057:7: note: candidate function template not viable: requires 3 arguments, but 2 were provided
+ 1057 |       exchange(_Tp* __ptr, _Val<_Tp> __desired, memory_order __m) noexcept
+      |       ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:39:16: error: no member named 'exchange' in namespace 'std'; did you mean 'std::__atomic_impl::exchange'? [clang-diagnostic-error]
+   39 |       : degree(std::exchange(other.degree, 0)),
+      |                ^~~~~~~~~~~~~
+      |                std::__atomic_impl::exchange
+/usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/atomic_base.h:1057:7: note: 'std::__atomic_impl::exchange' declared here
+ 1057 |       exchange(_Tp* __ptr, _Val<_Tp> __desired, memory_order __m) noexcept
+      |       ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:39:21: error: no member named 'exchange' in namespace 'std'; did you mean '__exchange'? [clang-diagnostic-error]
+   39 |       : degree(std::exchange(other.degree, 0)),
+      |                ~~~~~^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/move.h:150:5: note: '__exchange' declared here
+  150 |     __exchange(_Tp& __obj, _Up&& __new_val)
+      |     ^
+note: this fix will not be applied because it overlaps with another fix
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:41:47: warning: do not use 'std::endl' with streams; use '\n' instead [performance-avoid-endl]
+   41 |     std::cout << "Move constructor called" << std::endl;
+      |                                               ^~~~~~~~~
+      |                                               '\n'
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:46:55: warning: do not use 'std::endl' with streams; use '\n' instead [performance-avoid-endl]
+   46 |     std::cout << "Move assignment operator called" << std::endl;
+      |                                                       ^~~~~~~~~
+      |                                                       '\n'
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:48:16: error: no member named 'exchange' in namespace 'std'; did you mean 'std::__atomic_impl::exchange'? [clang-diagnostic-error]
+   48 |       degree = std::exchange(other.degree, 0);
+      |                ^~~~~~~~~~~~~
+      |                std::__atomic_impl::exchange
+/usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/atomic_base.h:1057:7: note: 'std::__atomic_impl::exchange' declared here
+ 1057 |       exchange(_Tp* __ptr, _Val<_Tp> __desired, memory_order __m) noexcept
+      |       ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:48:21: error: no member named 'exchange' in namespace 'std'; did you mean '__exchange'? [clang-diagnostic-error]
+   48 |       degree = std::exchange(other.degree, 0);
+      |                ~~~~~^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/move.h:150:5: note: '__exchange' declared here
+  150 |     __exchange(_Tp& __obj, _Up&& __new_val)
+      |     ^
+note: this fix will not be applied because it overlaps with another fix
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:57:47: warning: do not use 'std::endl' with streams; use '\n' instead [performance-avoid-endl]
+   57 |     std::cout << "Copy constructor called" << std::endl;
+      |                                               ^~~~~~~~~
+      |                                               '\n'
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:89:5: warning: variable 'result_degree' of type 'int' can be declared 'const' [misc-const-correctness]
+   89 |     int result_degree = degree + other.degree;
+      |     ^
+      |         const 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:251:45: warning: 2 adjacent parameters of 'sincos' of similar type ('TaylorSeries<T> &') are easily swapped by mistake [bugprone-easily-swappable-parameters]
+  251 |   static void sincos(const TaylorSeries &x, TaylorSeries &s, TaylorSeries &c) {
+      |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:251:59: note: the first parameter in the range is 's'
+  251 |   static void sincos(const TaylorSeries &x, TaylorSeries &s, TaylorSeries &c) {
+      |                                                           ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:251:76: note: the last parameter in the range is 'c'
+  251 |   static void sincos(const TaylorSeries &x, TaylorSeries &s, TaylorSeries &c) {
+      |                                                                            ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:299:9: warning: use c++17 style variable templates [modernize-type-traits]
+  299 |     if (std::is_floating_point<S>::value || exponent < 0) {
+      |         ^                        ~~~~~~~
+      |                               _v
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:324:55: warning: do not use 'std::endl' with streams; use '\n' instead [performance-avoid-endl]
+  324 |     std::cout << "Copy assignment operator called" << std::endl;
+      |                                                       ^~~~~~~~~
+      |                                                       '\n'
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:389:3: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  389 |   long n = X.size();
+      |   ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:389:3: warning: variable 'n' of type 'long' can be declared 'const' [misc-const-correctness]
+  389 |   long n = X.size();
+      |   ^
+      |        const 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:395:8: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  395 |   for (long i = 0; i < X.size(); i++) {
+      |        ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/hbtaylor.hpp:395:22: warning: comparison of integers of different signs: 'long' and 'size_type' (aka 'unsigned long') [clang-diagnostic-sign-compare]
+  395 |   for (long i = 0; i < X.size(); i++) {
+      |                    ~ ^ ~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/ODESystem.hpp:393:12: note: in instantiation of function template specialization 'computeODECoefficients<(lambda at /home/orebas/cpp/HC-MC/project/HC-MC/include/ODESystem.hpp:380:27), double>' requested here
+  393 |     return computeODECoefficients(this->initial_state, wrapped_system, degree);
+      |            ^
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:195:30: note: in instantiation of member function 'ODESystem<double, MyStateEquations, MyObservationFunction>::computeTaylorSeriesOfState' requested here
+  195 |   auto state_series = system.computeTaylorSeriesOfState(t0, degree);
+      |                              ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/integration_interface.hpp:7:13: error: use of undeclared identifier 'observable_vector' [clang-diagnostic-error]
+    7 | std::vector<observable_vector<T>> integrate_and_observe(
+      |             ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/integration_interface.hpp:9:3: warning: do not use namespace using-directives; use using-declarations instead [google-build-using-namespace]
+    9 |   using namespace boost::numeric::odeint;
+      |   ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/integration_interface.hpp:9:35: warning: do not use namespace using-directives; use using-declarations instead [google-build-using-namespace]
+    9 |   using namespace boost::numeric::odeint;
+      |                                   ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/integration_interface.hpp:11:3: error: no template named 'state_vector' [clang-diagnostic-error]
+   11 |   state_vector<T> state = system.getInitialState();
+      |   ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/integration_interface.hpp:11:19: error: use of undeclared identifier 'state'; did you mean 'stage'? [clang-diagnostic-error]
+   11 |   state_vector<T> state = system.getInitialState();
+      |                   ^~~~~
+      |                   stage
+/usr/local/include/boost/numeric/odeint/stepper/explicit_generic_rk.hpp:67:8: note: 'stage' declared here
+   67 | struct stage
+      |        ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/integration_interface.hpp:12:15: error: use of undeclared identifier 'observable_vector' [clang-diagnostic-error]
+   12 |   std::vector<observable_vector<T>> observables;
+      |               ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/integration_interface.hpp:14:29: error: no template named 'state_vector' [clang-diagnostic-error]
+   14 |   auto observer = [&](const state_vector<T>& x, const T& /* t */) {
+      |                             ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/integration_interface.hpp:14:46: warning: unused parameter 'x' [clang-diagnostic-unused-parameter]
+   14 |   auto observer = [&](const state_vector<T>& x, const T& /* t */) {
+      |                                              ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/integration_interface.hpp:15:5: error: no template named 'observable_vector' [clang-diagnostic-error]
+   15 |     observable_vector<T> y;
+      |     ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/integration_interface.hpp:20:24: error: use of undeclared identifier 'state_vector' [clang-diagnostic-error]
+   20 |   typedef runge_kutta4<state_vector<T>, T, state_vector<T>, T> stepper_type;
+      |                        ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/integration_interface.hpp:20:59: error: expected unqualified-id [clang-diagnostic-error]
+   20 |   typedef runge_kutta4<state_vector<T>, T, state_vector<T>, T> stepper_type;
+      |                                                           ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/integration_interface.hpp:21:19: error: use of undeclared identifier 'stepper_type'; did you mean 'stepper_tag'? [clang-diagnostic-error]
+   21 |   integrate_times(stepper_type(), system, state, time_values.begin(),
+      |                   ^
+/usr/local/include/boost/numeric/odeint/stepper/stepper_categories.hpp:32:8: note: 'stepper_tag' declared here
+   32 | struct stepper_tag {};
+      |        ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:2:1: warning: missing username/bug in TODO [google-readability-todo]
+    2 | // TODO:  The below is totally untested.
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      | // TODO(orebas):  The below is totally untested.
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:23:51: warning: function 'computeObservabilityMatrix' exceeds recommended size/complexity thresholds [readability-function-size]
+   23 | ObservabilityResult<typename ODESystem::RealType> computeObservabilityMatrix(
+      |                                                   ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:23:51: note: 107 lines including whitespace and comments (threshold 100)
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:135:30: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  135 |   std::unordered_map<size_t, long>
+      |                              ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:145:3: warning: constructors that are callable with a single argument must be marked explicit to avoid unintentional implicit conversions [google-explicit-constructor,hicpp-explicit-conversions]
+  145 |   ObservabilityAnalyzer(double rtol = 1e-12, double atol = 1e-12)
+      |   ^
+      |   explicit 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:158:5: warning: variable 'max_rank' of type 'int' can be declared 'const' [misc-const-correctness]
+  158 |     int max_rank = computeRank(working_matrix);
+      |     ^
+      |         const 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:187:8: error: no type named 'mt19937' in namespace 'std' [clang-diagnostic-error]
+  187 |   std::mt19937 rng_{std::random_device{}()};
+      |   ~~~~~^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:187:16: warning: private field 'rng_' is not used [clang-diagnostic-unused-private-field]
+  187 |   std::mt19937 rng_{std::random_device{}()};
+      |                ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:189:7: warning: method 'computeRank' can be made const [readability-make-member-function-const]
+  189 |   int computeRank(const Eigen::MatrixXd& matrix) {
+      |       ^
+      |                                                  const
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:190:5: warning: variable 'svd' of type 'Eigen::JacobiSVD<Eigen::MatrixXd>' (aka 'JacobiSVD<Matrix<double, Dynamic, Dynamic>>') can be declared 'const' [misc-const-correctness]
+  190 |     Eigen::JacobiSVD<Eigen::MatrixXd> svd(matrix);
+      |     ^
+      |                                       const 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:193:5: warning: variable 'threshold' of type 'double' can be declared 'const' [misc-const-correctness]
+  193 |     double threshold = atol_ + rtol_ * singular_values(0);
+      |     ^
+      |            const 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:204:3: warning: method 'findUnidentifiableParameters' can be made const [readability-make-member-function-const]
+  204 |   findUnidentifiableParameters(const Eigen::MatrixXd& matrix) {
+      |   ^
+      |                                                               const
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:206:5: warning: variable 'svd' of type 'Eigen::JacobiSVD<Eigen::MatrixXd>' (aka 'JacobiSVD<Matrix<double, Dynamic, Dynamic>>') can be declared 'const' [misc-const-correctness]
+  206 |     Eigen::JacobiSVD<Eigen::MatrixXd> svd(matrix, Eigen::ComputeFullV);
+      |     ^
+      |                                       const 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:210:5: warning: variable 'threshold' of type 'double' can be declared 'const' [misc-const-correctness]
+  210 |     double threshold = atol_ + rtol_ * singular_values(0);
+      |     ^
+      |            const 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:214:5: warning: variable 'unident_values' of type 'std::vector<double>' can be declared 'const' [misc-const-correctness]
+  214 |     std::vector<double> unident_values;
+      |     ^
+      |                         const 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:215:10: error: no template named 'uniform_real_distribution' in namespace 'std'; did you mean 'uniform_int_distribution'? [clang-diagnostic-error]
+  215 |     std::uniform_real_distribution<double> dist(
+      |     ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+      |          uniform_int_distribution
+/usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/uniform_int_dist.h:88:11: note: 'uniform_int_distribution' declared here
+   88 |     class uniform_int_distribution
+      |           ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:244:8: warning: method 'removeUnidentifiableColumns' can be made static [readability-convert-member-functions-to-static]
+  244 |   void removeUnidentifiableColumns(Eigen::MatrixXd& matrix,
+      |        ^
+      |   static 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:246:32: warning: statement should be inside braces [hicpp-braces-around-statements,readability-braces-around-statements]
+  246 |     if (unident_params.empty()) return;
+      |                                ^       
+      |                                 {
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:250:10: warning: variable 'idx' of type 'size_t' (aka 'unsigned long') can be declared 'const' [misc-const-correctness]
+  250 |     for (size_t idx : unident_params) {
+      |          ^
+      |                 const 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:255:5: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  255 |     long new_cols = std::count(keep_col.begin(), keep_col.end(), true);
+      |     ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:255:5: warning: variable 'new_cols' of type 'long' can be declared 'const' [misc-const-correctness]
+  255 |     long new_cols = std::count(keep_col.begin(), keep_col.end(), true);
+      |     ^
+      |          const 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:269:30: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  269 |   std::unordered_map<size_t, long> findMinimumDerivatives(
+      |                              ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:271:7: warning: 2 adjacent parameters of 'findMinimumDerivatives' of convertible types are easily swapped by mistake [bugprone-easily-swappable-parameters]
+  271 |       size_t max_derivatives, int target_rank) {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:271:14: note: the first parameter in the range is 'max_derivatives'
+  271 |       size_t max_derivatives, int target_rank) {
+      |              ^~~~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:271:35: note: the last parameter in the range is 'target_rank'
+  271 |       size_t max_derivatives, int target_rank) {
+      |                                   ^~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:271:7: note: 
+  271 |       size_t max_derivatives, int target_rank) {
+      |       ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:271:31: note: 'size_t' and 'int' may be implicitly converted: 'size_t' (as 'unsigned long') -> 'int', 'int' -> 'size_t' (as 'unsigned long')
+  271 |       size_t max_derivatives, int target_rank) {
+      |                               ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:272:32: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  272 |     std::unordered_map<size_t, long> deriv_levels;
+      |                                ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:274:25: warning: narrowing conversion from 'size_t' (aka 'unsigned long') to signed type 'mapped_type' (aka 'long') is implementation-defined [bugprone-narrowing-conversions,cppcoreguidelines-narrowing-conversions]
+  274 |       deriv_levels[i] = max_derivatives;
+      |                         ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:283:40: warning: statement should be inside braces [hicpp-braces-around-statements,readability-braces-around-statements]
+  283 |         if (deriv_levels[obs_idx] == 0) continue;
+      |                                        ^         
+      |                                         {
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:289:9: warning: variable 'reduced_matrix' of type 'Eigen::MatrixXd' (aka 'Matrix<double, Dynamic, Dynamic>') can be declared 'const' [misc-const-correctness]
+  289 |         Eigen::MatrixXd reduced_matrix = constructReducedMatrix(
+      |         ^
+      |                         const 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:307:19: warning: method 'constructReducedMatrix' can be made static [readability-convert-member-functions-to-static]
+  307 |   Eigen::MatrixXd constructReducedMatrix(
+      |                   ^
+      |   static 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:309:40: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  309 |       const std::unordered_map<size_t, long>& deriv_levels,
+      |                                        ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:310:7: warning: 2 adjacent parameters of 'constructReducedMatrix' of similar type ('size_t') are easily swapped by mistake [bugprone-easily-swappable-parameters]
+  310 |       size_t num_observables, size_t max_derivatives) {
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:310:14: note: the first parameter in the range is 'num_observables'
+  310 |       size_t num_observables, size_t max_derivatives) {
+      |              ^~~~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:310:38: note: the last parameter in the range is 'max_derivatives'
+  310 |       size_t num_observables, size_t max_derivatives) {
+      |                                      ^~~~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:310:38: warning: unused parameter 'max_derivatives' [clang-diagnostic-unused-parameter]
+  310 |       size_t num_observables, size_t max_derivatives) {
+      |                                      ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:310:38: warning: parameter 'max_derivatives' is unused [misc-unused-parameters]
+  310 |       size_t num_observables, size_t max_derivatives) {
+      |                                      ^~~~~~~~~~~~~~~
+      |                                       /*max_derivatives*/
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:312:5: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  312 |     long total_rows = 0;
+      |     ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:323:9: warning: consider replacing 'long' with 'int64' [google-runtime-int]
+  323 |         long full_row = obs + deriv * num_observables;
+      |         ^
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:323:9: warning: variable 'full_row' of type 'long' can be declared 'const' [misc-const-correctness]
+  323 |         long full_row = obs + deriv * num_observables;
+      |         ^
+      |              const 
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:323:25: warning: narrowing conversion from 'size_t' (aka 'unsigned long') to signed type 'long' is implementation-defined [bugprone-narrowing-conversions,cppcoreguidelines-narrowing-conversions]
+  323 |         long full_row = obs + deriv * num_observables;
+      |                         ^
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:14:31: warning: using decl 'integrate_times' is unused [misc-unused-using-decls]
+   14 | using boost::numeric::odeint::integrate_times;
+      |                               ^
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:14:31: note: remove the using
+   14 | using boost::numeric::odeint::integrate_times;
+      | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+   15 | using boost::numeric::odeint::runge_kutta4;
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:15:31: warning: using decl 'runge_kutta4' is unused [misc-unused-using-decls]
+   15 | using boost::numeric::odeint::runge_kutta4;
+      |                               ^
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:15:31: note: remove the using
+   15 | using boost::numeric::odeint::runge_kutta4;
+      | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+   16 | 
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:49:38: warning: narrowing conversion from 'size_t' (aka 'unsigned long') to signed type 'Index' (aka 'long') is implementation-defined [bugprone-narrowing-conversions,cppcoreguidelines-narrowing-conversions]
+   49 |       std::cout << (result->solution[i]) << " ";
+      |                                      ^
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:53:38: warning: narrowing conversion from 'size_t' (aka 'unsigned long') to signed type 'Index' (aka 'long') is implementation-defined [bugprone-narrowing-conversions,cppcoreguidelines-narrowing-conversions]
+   53 |       std::cout << (result->solution[i]) << " ";
+      |                                      ^
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:115:17: warning: narrowing conversion from 'size_t' (aka 'unsigned long') to signed type 'Index' (aka 'long') is implementation-defined [bugprone-narrowing-conversions,cppcoreguidelines-narrowing-conversions]
+  115 |       residuals[idx] = simulated_observables[i][j] - T(ground_truth[i][j]);
+      |                 ^
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:124:17: warning: narrowing conversion from 'size_t' (aka 'unsigned long') to signed type 'Index' (aka 'long') is implementation-defined [bugprone-narrowing-conversions,cppcoreguidelines-narrowing-conversions]
+  124 |       residuals[idx] = simulated_observables[i][j] - T(ground_truth[i][j]);
+      |                 ^
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:169:17: warning: statement should be inside braces [hicpp-braces-around-statements,readability-braces-around-statements]
+  169 |       if (j > 0) std::cout << " + ";
+      |                 ^                   
+      |                  {
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:171:17: warning: statement should be inside braces [hicpp-braces-around-statements,readability-braces-around-statements]
+  171 |       if (j > 0) std::cout << "*t^" << j;
+      |                 ^                        
+      |                  {
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:212:3: warning: variable 'obs_matrix' of type 'Eigen::MatrixXd' (aka 'Matrix<double, Dynamic, Dynamic>') can be declared 'const' [misc-const-correctness]
+  212 |   Eigen::MatrixXd obs_matrix = Eigen::MatrixXd::Random(num_rows, num_cols);
+      |   ^
+      |                   const 
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:215:3: warning: variable 'param_names' of type 'std::vector<std::string>' (aka 'vector<basic_string<char>>') can be declared 'const' [misc-const-correctness]
+  215 |   std::vector<std::string> param_names = {"p1", "p2", "p3", "p4", "p5"};
+      |   ^
+      |                            const 
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:221:3: warning: variable 'result' of type 'DerivativeLevels' can be declared 'const' [misc-const-correctness]
+  221 |   DerivativeLevels result =
+      |   ^
+      |                    const 
+/home/orebas/cpp/HC-MC/project/HC-MC/main.cpp:234:5: warning: an exception may be thrown in function 'main' which should not throw exceptions [bugprone-exception-escape]
+  234 | int main() {
+      |     ^
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:23:1: warning: function 'DOCTEST_ANON_FUNC_14' declared 'static', move to anonymous namespace instead [misc-use-anonymous-namespace]
+   23 | TEST_CASE("Circle-Line Intersection") {
+      | ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:2936:25: note: expanded from macro 'TEST_CASE'
+ 2936 | #define TEST_CASE(name) DOCTEST_TEST_CASE(name)
+      |                         ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:2194:42: note: expanded from macro 'DOCTEST_TEST_CASE'
+ 2194 |     DOCTEST_CREATE_AND_REGISTER_FUNCTION(DOCTEST_ANONYMOUS(DOCTEST_ANON_FUNC_), decorators)
+      |                                          ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:422:30: note: expanded from macro 'DOCTEST_ANONYMOUS'
+  422 | #define DOCTEST_ANONYMOUS(x) DOCTEST_CAT(x, __COUNTER__)
+      |                              ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:420:29: note: expanded from macro 'DOCTEST_CAT'
+  420 | #define DOCTEST_CAT(s1, s2) DOCTEST_CAT_IMPL(s1, s2)
+      |                             ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:419:34: note: expanded from macro 'DOCTEST_CAT_IMPL'
+  419 | #define DOCTEST_CAT_IMPL(s1, s2) s1##s2
+      |                                  ^
+note: expanded from here
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:38:31: warning: unchecked access to optional value [bugprone-unchecked-optional-access]
+   38 |   const auto& solve_result = *result;
+      |                               ^
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:53:3: warning: variable 'x' of type 'double' can be declared 'const' [misc-const-correctness]
+   53 |   double x = CppAD::Value(X(0));
+      |   ^
+      |          const 
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:54:3: warning: variable 'y' of type 'double' can be declared 'const' [misc-const-correctness]
+   54 |   double y = CppAD::Value(X(1));
+      |   ^
+      |          const 
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:62:1: warning: function 'DOCTEST_ANON_FUNC_16' declared 'static', move to anonymous namespace instead [misc-use-anonymous-namespace]
+   62 | TEST_CASE("Parabola-Line Intersection") {
+      | ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:2936:25: note: expanded from macro 'TEST_CASE'
+ 2936 | #define TEST_CASE(name) DOCTEST_TEST_CASE(name)
+      |                         ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:2194:42: note: expanded from macro 'DOCTEST_TEST_CASE'
+ 2194 |     DOCTEST_CREATE_AND_REGISTER_FUNCTION(DOCTEST_ANONYMOUS(DOCTEST_ANON_FUNC_), decorators)
+      |                                          ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:422:30: note: expanded from macro 'DOCTEST_ANONYMOUS'
+  422 | #define DOCTEST_ANONYMOUS(x) DOCTEST_CAT(x, __COUNTER__)
+      |                              ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:420:29: note: expanded from macro 'DOCTEST_CAT'
+  420 | #define DOCTEST_CAT(s1, s2) DOCTEST_CAT_IMPL(s1, s2)
+      |                             ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:419:34: note: expanded from macro 'DOCTEST_CAT_IMPL'
+  419 | #define DOCTEST_CAT_IMPL(s1, s2) s1##s2
+      |                                  ^
+note: expanded from here
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:76:31: warning: unchecked access to optional value [bugprone-unchecked-optional-access]
+   76 |   const auto& solve_result = *result;
+      |                               ^
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:82:3: warning: variable 'x' of type 'double' can be declared 'const' [misc-const-correctness]
+   82 |   double x = CppAD::Value(X(0));
+      |   ^
+      |          const 
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:83:3: warning: variable 'y' of type 'double' can be declared 'const' [misc-const-correctness]
+   83 |   double y = CppAD::Value(X(1));
+      |   ^
+      |          const 
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:94:1: warning: function 'DOCTEST_ANON_FUNC_18' declared 'static', move to anonymous namespace instead [misc-use-anonymous-namespace]
+   94 | TEST_CASE("3D Sphere-Plane-Line Intersection") {
+      | ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:2936:25: note: expanded from macro 'TEST_CASE'
+ 2936 | #define TEST_CASE(name) DOCTEST_TEST_CASE(name)
+      |                         ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:2194:42: note: expanded from macro 'DOCTEST_TEST_CASE'
+ 2194 |     DOCTEST_CREATE_AND_REGISTER_FUNCTION(DOCTEST_ANONYMOUS(DOCTEST_ANON_FUNC_), decorators)
+      |                                          ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:422:30: note: expanded from macro 'DOCTEST_ANONYMOUS'
+  422 | #define DOCTEST_ANONYMOUS(x) DOCTEST_CAT(x, __COUNTER__)
+      |                              ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:420:29: note: expanded from macro 'DOCTEST_CAT'
+  420 | #define DOCTEST_CAT(s1, s2) DOCTEST_CAT_IMPL(s1, s2)
+      |                             ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:419:34: note: expanded from macro 'DOCTEST_CAT_IMPL'
+  419 | #define DOCTEST_CAT_IMPL(s1, s2) s1##s2
+      |                                  ^
+note: expanded from here
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:111:31: warning: unchecked access to optional value [bugprone-unchecked-optional-access]
+  111 |   const auto& solve_result = *result;
+      |                               ^
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:126:1: warning: function 'DOCTEST_ANON_FUNC_20' declared 'static', move to anonymous namespace instead [misc-use-anonymous-namespace]
+  126 | TEST_CASE("System with Transcendental Functions") {
+      | ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:2936:25: note: expanded from macro 'TEST_CASE'
+ 2936 | #define TEST_CASE(name) DOCTEST_TEST_CASE(name)
+      |                         ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:2194:42: note: expanded from macro 'DOCTEST_TEST_CASE'
+ 2194 |     DOCTEST_CREATE_AND_REGISTER_FUNCTION(DOCTEST_ANONYMOUS(DOCTEST_ANON_FUNC_), decorators)
+      |                                          ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:422:30: note: expanded from macro 'DOCTEST_ANONYMOUS'
+  422 | #define DOCTEST_ANONYMOUS(x) DOCTEST_CAT(x, __COUNTER__)
+      |                              ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:420:29: note: expanded from macro 'DOCTEST_CAT'
+  420 | #define DOCTEST_CAT(s1, s2) DOCTEST_CAT_IMPL(s1, s2)
+      |                             ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:419:34: note: expanded from macro 'DOCTEST_CAT_IMPL'
+  419 | #define DOCTEST_CAT_IMPL(s1, s2) s1##s2
+      |                                  ^
+note: expanded from here
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:141:31: warning: unchecked access to optional value [bugprone-unchecked-optional-access]
+  141 |   const auto& solve_result = *result;
+      |                               ^
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:154:1: warning: function 'DOCTEST_ANON_FUNC_22' declared 'static', move to anonymous namespace instead [misc-use-anonymous-namespace]
+  154 | TEST_CASE("Higher Dimensional System") {
+      | ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:2936:25: note: expanded from macro 'TEST_CASE'
+ 2936 | #define TEST_CASE(name) DOCTEST_TEST_CASE(name)
+      |                         ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:2194:42: note: expanded from macro 'DOCTEST_TEST_CASE'
+ 2194 |     DOCTEST_CREATE_AND_REGISTER_FUNCTION(DOCTEST_ANONYMOUS(DOCTEST_ANON_FUNC_), decorators)
+      |                                          ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:422:30: note: expanded from macro 'DOCTEST_ANONYMOUS'
+  422 | #define DOCTEST_ANONYMOUS(x) DOCTEST_CAT(x, __COUNTER__)
+      |                              ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:420:29: note: expanded from macro 'DOCTEST_CAT'
+  420 | #define DOCTEST_CAT(s1, s2) DOCTEST_CAT_IMPL(s1, s2)
+      |                             ^
+/home/orebas/cpp/HC-MC/build/vcpkg_installed/x64-linux/debug/lib/pkgconfig/../../../include/doctest/doctest.h:419:34: note: expanded from macro 'DOCTEST_CAT_IMPL'
+  419 | #define DOCTEST_CAT_IMPL(s1, s2) s1##s2
+      |                                  ^
+note: expanded from here
+/home/orebas/cpp/HC-MC/project/HC-MC/tests/pt_tests.cpp:172:31: warning: unchecked access to optional value [bugprone-unchecked-optional-access]
+  172 |   const auto& solve_result = *result;
+      |                               ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/13/../../../../include/c++/13/bits/uniform_int_dist.h:90:21: error: static assertion failed due to requirement 'std::is_integral<double>::value': template argument must be an integral type [clang-diagnostic-error]
+   90 |       static_assert(std::is_integral<_IntType>::value,
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/orebas/cpp/HC-MC/project/HC-MC/include/observability.hpp:215:44: note: in instantiation of template class 'std::uniform_int_distribution<double>' requested here
+  215 |     std::uniform_real_distribution<double> dist(
+      |                                            ^

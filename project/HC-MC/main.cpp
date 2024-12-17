@@ -5,28 +5,24 @@
 
 #include "HC-MC.hpp"
 #include "ODESystem.hpp"
+#include "hbtaylor.hpp"
 #include "integration_interface.hpp"
+#include "observability.hpp"
+#include "prob1.hpp"
 #include "types.hpp"
 
-using namespace boost::numeric::odeint;
+using boost::numeric::odeint::integrate_times;
+using boost::numeric::odeint::runge_kutta4;
 
-#include <cppad/cppad.hpp>
-#include <vector>
-
-template <typename T>
-struct SystemConfig {
-  std::vector<T> time_values;
-  std::vector<T> true_params;
-  std::vector<T> true_initial_state;
-};
+#include "eigenwrap.hpp"
 
 template <typename T>
 struct SolverConfig {
   SolveOptions options;
-  Vector<T> initial_guess;
+  //  Vector<T> initial_guess;
 };
 
-SolverConfig<double> create_solver_config() {
+inline SolverConfig<double> create_solver_config() {
   SolverConfig<double> config;
   config.options.debug = true;
   config.options.tolerance = 1e-6;
@@ -34,67 +30,13 @@ SolverConfig<double> create_solver_config() {
   config.options.initialStepSize = 0.1;
   config.options.verifyDerivatives = true;
 
-  config.initial_guess.resize(4);
+  /*config.initial_guess.resize(4);
   config.initial_guess[0] = 1.0;  // Guess for parameter p[0]
   config.initial_guess[1] = 1.0;  // Guess for parameter p[1]
   config.initial_guess[2] = 1.0;  // Guess for initial_state[0]
   config.initial_guess[3] = 0.5;  // Guess for initial_state[1]
-
+*/
   return config;
-}
-
-// Helper functions
-SystemConfig<double> create_system_config() {
-  return {
-      {0.0, 0.5, 1.0, 1.5, 2.0},  // time_values
-      {1.3, 1.8},                 // true_params
-      {1.0, 0.5}                  // true_initial_state
-  };
-}
-
-// State equation template
-template <typename T>
-struct MyStateEquations {
-  void operator()(const state_vector<T>& x, state_vector<T>& dxdt,
-                  const parameter_vector<T>& p, const T& /* t */) const {
-    dxdt.resize(2);
-    dxdt[0] = p[0] * x[0];
-    dxdt[1] = p[1] * x[1];
-  }
-};
-
-// Observation function template
-template <typename T>
-struct MyObservationFunction {
-  void operator()(const state_vector<T>& x, observable_vector<T>& y) const {
-    y.resize(2);
-    y[0] = x[0];
-    y[1] = x[1];
-  }
-};
-
-// Create the true system with state equations and observation functions
-auto create_true_system(const SystemConfig<double>& config) {
-  /*  auto state_equations =
-        [](const state_vector<double>& x, state_vector<double>& dxdt,
-           const parameter_vector<double>& p, const double&  t ) {
-          dxdt.resize(2);
-          dxdt[0] = p[0] * x[0];
-          dxdt[1] = p[1] * x[1];
-        };
-
-    auto observation_function = [](const state_vector<double>& x,
-                                   observable_vector<double>& y) {
-      y.resize(2);
-      y[0] = x[0];
-      y[1] = x[1];
-    };*/
-
-  ODESystem<double, MyStateEquations, MyObservationFunction> system(
-      config.true_params, MyStateEquations<double>{},
-      MyObservationFunction<double>{});
-  system.setInitialState(config.true_initial_state);
-  return system;
 }
 
 // Function to print results
@@ -128,17 +70,6 @@ void run_solvers(const auto& objective, const SolverConfig<double>& config) {
   print_solution_results("Newton method", newton_result);
 }
 
-template <typename VectorType>
-VectorType ode_system(const VectorType& y) {
-  size_t n = y.size();
-  VectorType dy_dt(n);
-  dy_dt[0] = 1;  // Example: dy_0/dt = 1
-  for (size_t k = 1; k < n; ++k) {
-    dy_dt[k] = y[k - 1];  // dy_k/dt = y_{k-1}
-  }
-  return dy_dt;
-}
-
 // Generate ground truth data from the system
 template <typename System>
 std::vector<observable_vector<double>> generate_ground_truth(
@@ -153,52 +84,29 @@ auto create_parameter_objective(
     const std::vector<observable_vector<double>>& ground_truth) {
   return [config, time_values,
           ground_truth](const ADVector& params) -> ADVector {
-    /*std::cout << "\n=== Parameter Objective Called ===\n";*/
-
-    // Debug input parameters
-    /*std::cout << "Input params: ";
-    for (const auto& p : params) {
-      std::cout << (p) << " ";
-    }
-    std::cout << "\n";*/
-
-    // Extract parameters and initial state
-    size_t param_size = 2;
-    size_t state_size = 2;
-    parameter_vector<AD<T>> p(params.data(), params.data() + param_size);
-    state_vector<AD<T>> initial_state(params.data() + param_size,
-                                      params.data() + param_size + state_size);
-
-    /*std::cout << "Creating system with:\n";
-    std::cout << "Parameters: " << (p[0]) << ", " << (p[1]) << "\n";
-    std::cout << "Initial state: " << (initial_state[0]) << ", "
-              << (initial_state[1]) << "\n";*/
+    const size_t param_size = 2;
+    const size_t state_size = 2;
+    const parameter_vector<AD<T>> p(params.data(), params.data() + param_size);
+    const state_vector<AD<T>> initial_state(
+        params.data() + param_size, params.data() + param_size + state_size);
 
     // Create the ODESystem instance directly with AD types
     ODESystem<AD<T>, MyStateEquations, MyObservationFunction> system(
-        p, MyStateEquations<AD<T>>{}, MyObservationFunction<AD<T>>{});
+        p, MyStateEquations<AD<T>>{}, MyObservationFunction<AD<T>>{}, 2, 2);
     system.setInitialState(initial_state);
 
     // Simulate the system
-    std::vector<AD<T>> ad_time_values(time_values.begin(), time_values.end());
-    auto simulated_observables = integrate_and_observe(system, ad_time_values);
-
-    // Debug simulated results
-    /*std::cout << "\nSimulated observables:\n";
-    for (size_t i = 0; i < simulated_observables.size(); ++i) {
-      std::cout << "t = " << time_values[i] << ": ";
-      for (const auto& val : simulated_observables[i]) {
-        std::cout << (val) << " ";
-      }
-      std::cout << "\n";
-    }*/
+    const std::vector<AD<T>> ad_time_values(time_values.begin(),
+                                            time_values.end());
+    const auto simulated_observables =
+        integrate_and_observe(system, ad_time_values);
 
     // Calculate residuals
-    auto observable_length = simulated_observables[0].size();
+    const auto observable_length = simulated_observables[0].size();
     ADVector residuals(observable_length * 2);
 
-    size_t observable_count = simulated_observables.size();
-    size_t midpoint = observable_count / 2;
+    const size_t observable_count = simulated_observables.size();
+    const size_t midpoint = observable_count / 2;
 
     // Only use first and middle point for residuals
     size_t idx = 0;
@@ -228,12 +136,13 @@ auto create_parameter_objective(
 // Break down the main function into smaller pieces
 void example_parameter_estimation() {
   // Setup configuration
-  auto config = create_system_config();
-  auto solver_config = create_solver_config();
+  const auto config = create_system_config();
+  const auto solver_config = create_solver_config();
 
   // Generate ground truth data
-  auto true_system = create_true_system(config);
-  auto ground_truth = generate_ground_truth(true_system, config.time_values);
+  const auto true_system = create_true_system(config);
+  const auto ground_truth =
+      generate_ground_truth(true_system, config.time_values);
 
   // Display ground truth data
   std::cout << "\nGround truth data:\n";
@@ -251,8 +160,86 @@ void example_parameter_estimation() {
   run_solvers(objective, solver_config);
 }
 
+void print_taylor_series(const std::vector<TaylorSeries<double>>& series,
+                         const std::string& label) {
+  std::cout << "\n" << label << " Taylor series coefficients:\n";
+  for (size_t i = 0; i < series.size(); ++i) {
+    std::cout << "x_" << i << "(t) = ";
+    for (int j = 0; j <= series[i].getDegree(); ++j) {
+      if (j > 0) std::cout << " + ";
+      std::cout << series[i][j];
+      if (j > 0) std::cout << "*t^" << j;
+    }
+    std::cout << "\n";
+  }
+}
+
+void analyze_taylor_series() {
+  // Create system configuration with example parameters
+  const auto config = create_system_config();
+
+  // Create the ODE system with T = double
+  const auto system = create_true_system(config);
+
+  // Compute Taylor series around t0 = 0 using double-based system
+  const double t0 = 0.0;
+  const int degree = 5;  // Compute up to 5th order terms
+
+  std::cout << "\nComputing Taylor series for the ODE system:";
+  std::cout << "\nParameters: p1 = " << config.true_params[0]
+            << ", p2 = " << config.true_params[1];
+  std::cout << "\nInitial state: x1(0) = " << config.true_initial_state[0]
+            << ", x2(0) = " << config.true_initial_state[1] << "\n";
+
+  // Compute Taylor series of the state variables
+  auto state_series = system.computeTaylorSeriesOfState(t0, degree);
+  print_taylor_series(state_series, "State");
+
+  // Compute Taylor series of the observables
+  auto observable_series =
+      system.computeTaylorSeriesOfObservables(state_series);
+  print_taylor_series(observable_series, "Observable");
+}
+
+int obs_example() {
+  // Example matrix dimensions
+  const size_t num_rows = 20;   // Total rows in observability matrix
+  const size_t num_cols = 5;    // Number of parameters
+  const size_t num_obs = 2;     // Number of observable variables
+  const size_t max_derivs = 4;  // Maximum derivatives per observable
+
+  // Create sample observability matrix
+  Eigen::MatrixXd obs_matrix = Eigen::MatrixXd::Random(num_rows, num_cols);
+
+  // Optional: Parameter names for better output
+  std::vector<std::string> param_names = {"p1", "p2", "p3", "p4", "p5"};
+
+  // Create analyzer with default tolerances
+  ObservabilityAnalyzer analyzer;
+
+  // Analyze the matrix
+  DerivativeLevels result =
+      analyzer.analyze(obs_matrix, num_obs, max_derivs, param_names);
+
+  // Print results
+  std::cout << "Derivative levels needed:\n";
+  for (const auto& [obs_idx, deriv_count] : result.derivative_levels) {
+    std::cout << "Observable " << obs_idx << ": " << deriv_count
+              << " derivatives\n";
+  }
+
+  return 0;
+}
+
 int main() {
+  try {
+    analyze_taylor_series();
+  } catch (const std::exception& e) {
+    std::cerr << "Error: " << e.what() << '\n';
+  }
+
   example_parameter_estimation();
+  obs_example();
 
   return 0;
 }
